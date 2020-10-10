@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\v1\PermissionApiController;
+use App\Http\Controllers\Api\v1\RoleApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +23,9 @@ Route::group([],function () {
     //User
     Route::resource('users', UserApiController::class);
     // Route::post('user-update/{id}',[UserApiController::class,'update']);
+    //Permission
+    Route::apiResource('permissions', PermissionApiController::class);
 
+    //Role
+    Route::apiResource('roles', RoleApiController::class);
 });

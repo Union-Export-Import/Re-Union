@@ -8,17 +8,20 @@ use Illuminate\Support\Facades\Hash;
 class UserApiService {
     public static function manageUser($request, $user = null)
     {
-        $user = $user && $user->id ? $user->id : null;
+        $user_id = $user && $user->id ? $user->id : null;
         // dd($user);
 
-        User::updateOrcreate(
+      $user =  User::updateOrcreate(
             [
-                'id' => $user
+                'id' => $user_id
             ],
             [
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $user->roles()->sync($request->roles);
+        $user->permissions()->sync($request->permissions);
     }
 }
