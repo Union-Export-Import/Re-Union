@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\LoginApiController;
 use App\Http\Controllers\Api\v1\PermissionApiController;
 use App\Http\Controllers\Api\v1\RoleApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
@@ -20,12 +21,17 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::group([],function () {
-    //User
-    Route::resource('users', UserApiController::class);
     // Route::post('user-update/{id}',[UserApiController::class,'update']);
-    //Permission
-    Route::apiResource('permissions', PermissionApiController::class);
+    Route::post('login',[LoginApiController::class, 'login']);
 
-    //Role
-    Route::apiResource('roles', RoleApiController::class);
+    Route::middleware(['auth:sanctum'])->group(function () {
+        //Role
+        Route::apiResource('roles', RoleApiController::class);
+
+        //Permission
+        Route::apiResource('permissions', PermissionApiController::class);
+
+        //User
+        Route::resource('users', UserApiController::class);
+    });
 });
