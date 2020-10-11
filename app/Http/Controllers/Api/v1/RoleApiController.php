@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUserRequest;
-use App\Models\User;
-use App\Services\UserApiService;
+use App\Models\Role;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
 
-class UserApiController extends Controller
+class RoleApiController extends Controller
 {
     use ResponserTrait;
     /**
@@ -19,9 +17,9 @@ class UserApiController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $roles = Role::all();
 
-        return $this->respondCollection('success', $users);
+        return $this->respondCollection('success',$roles);
     }
 
     /**
@@ -30,9 +28,11 @@ class UserApiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        $user = UserApiService::manageUser($request);
+        Role::create([
+            'role_name' => $request->name
+        ]);
 
         return $this->respondCreateMessageOnly('success');
     }
@@ -40,10 +40,10 @@ class UserApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Role $role)
     {
         //
     }
@@ -52,27 +52,28 @@ class UserApiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, Role $role)
     {
-        $user = UserApiService::manageUser($request, $user);
+        $role->update([
+            'role_name' => $request->name
+        ]);
 
         return $this->respondCreateMessageOnly('success');
-
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Role $role)
     {
-        $user->delete();
+        $role->delete();
 
-        return $this->respondCreateMessageOnly('succes');
+        return $this->respondCreateMessageOnly('success');
     }
 }
