@@ -20,9 +20,10 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::group([],function () {
+Route::group([], function () {
     // Route::post('user-update/{id}',[UserApiController::class,'update']);
-    Route::post('login',[LoginApiController::class, 'login']);
+    Route::post('login', [LoginApiController::class, 'login']);
+    Route::resource('users/union/admin/team', UserApiController::class);
 
     Route::middleware(['auth:sanctum'])->group(function () {
         //Role
