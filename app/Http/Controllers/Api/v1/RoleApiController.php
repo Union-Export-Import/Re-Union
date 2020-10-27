@@ -17,9 +17,9 @@ class RoleApiController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
+        $roles = Role::paginate(10);
 
-        return $this->respondCollection('success',$roles);
+        return $this->respondCollectionWithPagination('success',$roles);
     }
 
     /**
