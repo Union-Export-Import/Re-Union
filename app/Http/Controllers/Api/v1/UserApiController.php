@@ -19,9 +19,9 @@ class UserApiController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with('roles','permissions')->paginate(10);
 
-        return $this->respondCollection('success', $users);
+        return $this->respondCollectionWithPagination('success', $users);
     }
 
     /**

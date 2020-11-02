@@ -18,9 +18,9 @@ class PermissionApiController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::paginate(10);
 
-        return $this->respondCollection('success', $permissions);
+        return $this->respondCollectionWithPagination('success', $permissions);
     }
 
     /**
