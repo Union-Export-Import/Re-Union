@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Permission;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserApiService
@@ -20,10 +22,10 @@ class UserApiService
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'nrc' => $request->nrc,
+                 'nrc' => $request->nrc,
                 'phone_number' => $request->phone_number,
-            ]);
-
+            ]
+        );
         $user->roles()->sync($request->roles);
         $user->permissions()->sync($request->permissions);
     }
