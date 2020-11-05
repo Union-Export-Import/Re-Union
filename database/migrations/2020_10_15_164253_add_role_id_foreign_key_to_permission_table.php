@@ -14,10 +14,11 @@ class AddRoleIdForeignKeyToPermissionTable extends Migration
     public function up()
     {
         Schema::table('permissions', function (Blueprint $table) {
+            $table->bigInteger('role_id')->unsigned();
             $table->foreign('role_id')
-                    ->references('id')
-                    ->on('roles')
-                    ->onCascade('delete');
+                ->references('id')
+                ->on('roles')
+                ->onCascade('delete');
         });
     }
 
@@ -29,7 +30,8 @@ class AddRoleIdForeignKeyToPermissionTable extends Migration
     public function down()
     {
         Schema::table('permissions', function (Blueprint $table) {
-            
+            $table->dropForeign('permissions_role_id_foreign');
+            $table->dropColumn('role_id');
         });
     }
 }

@@ -13,7 +13,7 @@ class CreatePermissionRole extends Migration
      */
     public function up()
     {
-        Schema::create('permission_role', function (Blueprint $table) {
+        Schema::create('role_permissions', function (Blueprint $table) {
             $table->id();
             $table->string('permission_id');
             $table->string('role_id');
@@ -28,6 +28,6 @@ class CreatePermissionRole extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permission_role');
+        Schema::dropIfExists('role_permissions');
     }
 }
