@@ -19,7 +19,7 @@ class UserApiController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles','permissions')->paginate(10);
+        $users = User::with('roles', 'permissions')->paginate(10);
 
         return $this->respondCollectionWithPagination('success', $users);
     }
@@ -33,6 +33,8 @@ class UserApiController extends Controller
     public function store(StoreUserRequest $request)
     {
         $user = UserApiService::manageUser($request);
+
+        UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
 
         return $this->respondCreateMessageOnly('success');
     }
@@ -58,6 +60,8 @@ class UserApiController extends Controller
     public function update(Request $request, User $user)
     {
         $user = UserApiService::manageUser($request, $user);
+
+        UserApiService::UacLogCreate(json_encode($request->all()), 'user_update');
 
         return $this->respondCreateMessageOnly('success');
 
