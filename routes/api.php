@@ -25,7 +25,7 @@ Route::group([], function () {
     Route::post('login', [LoginApiController::class, 'login']);
     Route::resource('users/union/admin/team', UserApiController::class);
 
-    // Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
         //Role
         Route::apiResource('roles', RoleApiController::class);
 
@@ -34,5 +34,5 @@ Route::group([], function () {
 
         //User
         Route::resource('users', UserApiController::class);
-    // });
+    });
 });
