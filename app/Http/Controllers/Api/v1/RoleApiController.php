@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\RolePermission;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,8 +21,8 @@ class RoleApiController extends Controller
     public function index()
     {
         $roles = Role::with('permissions')->paginate(10);
-      
-        return $this->respondCollectionWithPagination('success',$roles);
+
+        return $this->respondCollectionWithPagination('success', $roles);
     }
 
     /**
@@ -32,6 +33,7 @@ class RoleApiController extends Controller
      */
     public function store(Request $request)
     {
+
         DB::beginTransaction();
         $role = Role::create([
             'role_name' => $request->name
@@ -40,6 +42,14 @@ class RoleApiController extends Controller
         $new_permissions = $role->permissions()->createMany(
             $request->permissions
         );
+
+        foreach ($new_permissions as $permission) {
+            RolePermission::create(['role_id' => $role->id, 'permission_id' => $permission->id]);
+        }
+
+
+
+
 
         if ($role->exists) {
             DB::commit();
