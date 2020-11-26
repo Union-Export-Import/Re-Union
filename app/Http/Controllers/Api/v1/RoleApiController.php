@@ -47,10 +47,6 @@ class RoleApiController extends Controller
             RolePermission::create(['role_id' => $role->id, 'permission_id' => $permission->id]);
         }
 
-
-
-
-
         if ($role->exists) {
             DB::commit();
             return $this->respondCreateMessageOnly('success');
