@@ -34,5 +34,6 @@ Route::group([], function () {
 
         //User
         Route::resource('users', UserApiController::class);
+        Route::post('users/query', [UserApiController::class, 'query']);
     });
 });
