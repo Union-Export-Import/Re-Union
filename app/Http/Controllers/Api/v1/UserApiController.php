@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use App\Services\UserApiService;
+use App\Traits\EmailTrait;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserApiController extends Controller
 {
     use ResponserTrait;
+    use EmailTrait;
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +24,7 @@ class UserApiController extends Controller
     public function index()
     {
         $users = User::with('roles', 'permissions')->paginate(10);
-
+        
         return $this->respondCollectionWithPagination('success', $users);
     }
 
@@ -32,7 +36,12 @@ class UserApiController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $user = UserApiService::manageUser($request);
+        $auto_pwd = Str::random(8);
+        $hashed_random_password = Hash::make($auto_pwd);
+
+        $user = UserApiService::manageUser($request, $hashed_random_password);
+
+        $this->sendUserCreationEmail($user, $auto_pwd);
 
         UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
 
