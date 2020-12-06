@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AssetTypeApiController;
 use App\Http\Controllers\Api\v1\CustomerApiController;
 use App\Http\Controllers\Api\v1\LoginApiController;
 use App\Http\Controllers\Api\v1\PermissionApiController;
@@ -42,5 +43,9 @@ Route::group([], function () {
 
         //Supplier
         Route::resource('suppliers', SupplierApiController::class);
+        Route::post('users/query', [UserApiController::class, 'query']);
+
+        //AssetType
+        Route::resource('asset_types', AssetTypeApiController::class);
     });
 });

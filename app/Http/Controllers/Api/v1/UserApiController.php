@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use App\Services\UserApiService;
+use App\Traits\EmailTrait;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserApiController extends Controller
 {
     use ResponserTrait;
+    use EmailTrait;
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +36,13 @@ class UserApiController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $user = UserApiService::manageUser($request);
+        $auto_pwd = Str::random(8);
+        // $auto_pwd = 'password';
+        $hashed_random_password = Hash::make($auto_pwd);
+
+        $user = UserApiService::manageUser($request, $hashed_random_password);
+
+        $this->sendUserCreationEmail($user, $auto_pwd);
 
         UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
 
@@ -64,7 +74,6 @@ class UserApiController extends Controller
         UserApiService::UacLogCreate(json_encode($request->all()), 'user_update');
 
         return $this->respondCreateMessageOnly('success');
-
     }
 
     /**
@@ -78,5 +87,70 @@ class UserApiController extends Controller
         $user->delete();
 
         return $this->respondCreateMessageOnly('succes');
+    }
+
+    public function query(Request $request)
+    {
+
+
+        $query = null;
+
+        $filterExp = $request['filter']['filterParams'];
+
+        if (count($filterExp) != 0) {
+            foreach ($filterExp as $filterParam) {
+                if ($filterParam['filterType'] == 'text') {
+                    if ($filterParam['filterExpression'] == 'equals') {
+                        $filterQuery = User::where($filterParam['key'], '=', $filterParam['textValue']['value']);
+                        $query = clone $filterQuery;
+                    }
+                    if ($filterParam['filterExpression'] == 'notEquals') {
+                        $filterQuery = User::where($filterParam['key'], '<>', $filterParam['textValue']['value']);
+                        $query = clone $filterQuery;
+                    }
+                    if ($filterParam['filterExpression'] == 'contain') {
+                        $filterQuery = User::where($filterParam['key'], 'LIKE', '%' . $filterParam['textValue']['value'] . '%');
+                        $query = clone $filterQuery;
+                    }
+                }
+
+                if ($filterParam['filterType'] == 'textArray') {
+                    if ($filterParam['filterExpression'] == 'equals') {
+                        $filterQuery = User::whereIn($filterParam['key'], $filterParam['textArrayValues']['list']);
+                        $query = clone $filterQuery;
+                    }
+                    if ($filterParam['filterExpression'] == 'notEquals') {
+                        $filterQuery = User::whereNotIn($filterParam['key'], $filterParam['textArrayValues']['list']);
+                        $query = clone $filterQuery;
+                    }
+                }
+            }
+        }
+
+        // if (count($request['roles']) != 0 || $request['roles'] != null) {
+        //     $users = $query->with('roles', 'permissions')->get();
+        //     foreach ($users as $user) :
+        //         foreach ($user->roles as $r) :
+
+        //             if($r['role_name'] == $request[roles])
+
+        //         endforeach;
+        //     endforeach;
+        // }
+
+        if ($request != null) {
+            $query = $query->orderBy(
+                $request['sortingParams']['key'],
+                $request['sortingParams']['sortType']
+            )->with('roles', 'permissions')->paginate(
+                $request['paginationParam']['pageSize'],
+                ['*'],
+                'page',
+                $request['paginationParam']['pageNumber']
+            );
+        }
+
+
+        return $this->respondCollectionWithPagination('success', $query);
     }
 }
