@@ -60,7 +60,7 @@ class AssetTypeController extends Controller
         $assetType->update([
             'asset_type' => $request->asset_type,
         ]);
-        
+
         return $this->respondCreateMessageOnly('success');
     }
 

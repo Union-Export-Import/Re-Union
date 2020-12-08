@@ -43,6 +43,7 @@ class AssetTypeApiController extends Controller
     {
         $assetType->update([
             'asset_type' => $request->asset_type,
+            'asset_type' => $request->asset_type,
         ]);
 
         return $this->respondCreateMessageOnly('success');
