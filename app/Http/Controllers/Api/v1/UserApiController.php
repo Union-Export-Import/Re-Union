@@ -24,7 +24,7 @@ class UserApiController extends Controller
     public function index()
     {
         $users = User::with('roles', 'permissions')->paginate(10);
-        
+
         return $this->respondCollectionWithPagination('success', $users);
     }
 
@@ -37,6 +37,7 @@ class UserApiController extends Controller
     public function store(StoreUserRequest $request)
     {
         $auto_pwd = Str::random(8);
+        // $auto_pwd = 'password';
         $hashed_random_password = Hash::make($auto_pwd);
 
         $user = UserApiService::manageUser($request, $hashed_random_password);

@@ -1,9 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\v1\AssetApiController;
+use App\Http\Controllers\Api\V1\AssetTypeApiController;
+use App\Http\Controllers\Api\v1\CustomerApiController;
 use App\Http\Controllers\Api\v1\LoginApiController;
 use App\Http\Controllers\Api\v1\PermissionApiController;
 use App\Http\Controllers\Api\v1\RoleApiController;
+use App\Http\Controllers\Api\v1\SupplierApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
+use App\Models\Asset;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +39,18 @@ Route::group([], function () {
 
         //User
         Route::resource('users', UserApiController::class);
+
+        //Customer
+        Route::resource('customers', CustomerApiController::class);
+
+        //Supplier
+        Route::resource('suppliers', SupplierApiController::class);
         Route::post('users/query', [UserApiController::class, 'query']);
+
+        //AssetType
+        Route::resource('asset_types', AssetTypeApiController::class);
+
+        //Asset
+        Route::resource('assets', AssetApiController::class);
     });
 });
