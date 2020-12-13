@@ -91,8 +91,6 @@ class UserApiController extends Controller
 
     public function query(Request $request)
     {
-
-
         $query = null;
 
         $filterExp = $request['filter']['filterParams'];
