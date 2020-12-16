@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::group([], function () {
     // Route::post('user-update/{id}',[UserApiController::class,'update']);
     Route::post('login', [LoginApiController::class, 'login']);
+    Route::post('old_password_changed', [UserApiController::class, 'oldPasswordChange']);
     Route::resource('users/union/admin/team', UserApiController::class);
 
     Route::middleware(['auth:sanctum'])->group(function () {
