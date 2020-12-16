@@ -153,4 +153,16 @@ class UserApiController extends Controller
 
         return $this->respondCollectionWithPagination('success', $query);
     }
+
+    public function oldPasswordChange(Request $request)
+    {
+        $user = User::firstWhere('email', $request->email);
+        if ($user) {
+            $user->update([
+                'password' => Hash::make($request->new_password),
+                'is_password_changed' => true
+            ]);
+        }
+        return $this->respondCreateMessageOnly('success');
+    }
 }
