@@ -54,4 +54,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Permission::class);
     }
+
+
+    public function filterUser($query, $name)
+    {
+        return $query->where('name', $name);
+    }
 }

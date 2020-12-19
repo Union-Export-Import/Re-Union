@@ -176,10 +176,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
 
-        /*
-        lighthouse where condition provider
-        */
-        \Nuwave\Lighthouse\WhereConditions\WhereConditionsServiceProvider::class,
 
     ],
 

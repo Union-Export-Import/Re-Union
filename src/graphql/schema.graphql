@@ -7,16 +7,27 @@ scalar DateTime
 
 type Query {
 
-    """role api is here"""
+    """
+    user api is here
+    """
+    users: [User!]! @paginate(type: "paginator", model: "User")
 
-    users: [User!]! @paginate(defaultCount: 10)
     user(id: ID @eq): User @find
 
-    
-    """role api is here"""
+    filterUsers(
+        name: String! @builder(method: "App\\Models\\User@filterUser")
+    ): [User!]! @paginate
 
-    roles: [Role]! @paginate(type: "paginator" model: "Role")
+    """_______________________________________________________________________________________"""
+
+
+    """
+    role api is here
+    """
+    roles: [Role]! @paginate(type: "paginator", model: "Role")
     role(id: ID @eq): Role @find
+
+    """_______________________________________________________________________________________"""
 }
 
 type User {
