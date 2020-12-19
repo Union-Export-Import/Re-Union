@@ -16,7 +16,9 @@
         "laravel/sanctum": "^2.6",
         "laravel/telescope": "^4.3",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^3.0"
+        "laravel/ui": "^3.0",
+        "mll-lab/laravel-graphql-playground": "^2.4",
+        "nuwave/lighthouse": "^4.18"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
