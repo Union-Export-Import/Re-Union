@@ -14,8 +14,6 @@ class UserApiService
 
     public static function manageUser($request, $hashed_random_password, $user = null)
     {
-        // $hashed_random_password = Hash::make(Str::random(8));
-        
         $user_id = $user && $user->id ? $user->id : null;
         // dd($user);
 
@@ -29,10 +27,11 @@ class UserApiService
                 'password' => $hashed_random_password,
                 'nrc' => $request->nrc,
                 'phone_number' => $request->phone_number,
+                'account_status' => $request->status,
             ]
         );
         $user->roles()->sync($request->roles);
-        $user->permissions()->sync($request->permissions);
+        // $user->permissions()->sync($request->permissions);
 
         return $user;
 

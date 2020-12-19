@@ -23,7 +23,7 @@ class User extends Authenticatable
         'password',
         'nrc',
         'phone_number',
-        'is_password_changed'
+        'account_status'
     ];
 
     /**

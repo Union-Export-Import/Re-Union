@@ -53,5 +53,8 @@ Route::group([], function () {
 
         //Asset
         Route::resource('assets', AssetApiController::class);
+
+        //Forget Api
+        Route::post('forget_password', [UserApiController::class, 'forgetPassword']);
     });
 });
