@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Permission;
 use App\Models\Role;
-use App\Models\RolePermission;
+use App\Services\RoleApiService;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class RoleApiController extends Controller
 {
@@ -33,27 +31,9 @@ class RoleApiController extends Controller
      */
     public function store(Request $request)
     {
+        RoleApiService::manageRole($request);
 
-        DB::beginTransaction();
-        $role = Role::create([
-            'role_name' => $request->name
-        ]);
-
-        $new_permissions = $role->permissions()->createMany(
-            $request->permissions
-        );
-
-        foreach ($new_permissions as $permission) {
-            RolePermission::create(['role_id' => $role->id, 'permission_id' => $permission->id]);
-        }
-
-        if ($role->exists) {
-            DB::commit();
-            return $this->respondCreateMessageOnly('success');
-        } else {
-            DB::rollBack();
-            return $this->respondCreateMessageOnly('please try again');
-        }
+        return $this->respondCreateMessageOnly('success');
     }
 
     /**
@@ -65,6 +45,7 @@ class RoleApiController extends Controller
     public function show(Role $role)
     {
         $roleData = Role::with('permissions')->findOrFail($role->id);
+
         return $this->respondCollection('success', $roleData);
     }
 
@@ -77,9 +58,7 @@ class RoleApiController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        $role->update([
-            'role_name' => $request->name
-        ]);
+        RoleApiService::manageRole($request, $role);
 
         return $this->respondCreateMessageOnly('success');
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PermissionRequest;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\RolePermission;
@@ -30,18 +31,11 @@ class PermissionApiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Role $role)
+    public function store(PermissionRequest $request)
     {
-        dd($request);
-        $new_permission = $role->permissions()->createMany([
+        Permission::create([
             'permission_name' => $request->permission_name,
         ]);
-        // Permission::create([
-        //     'permission_name' => $request->permission_name,
-        // ]);
-
-        
-
         return $this->respondCreateMessageOnly('success');
     }
 

@@ -36,15 +36,16 @@ class UserApiController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        // dd($request->all());
         $auto_pwd = Str::random(8);
         // $auto_pwd = 'password';
         $hashed_random_password = Hash::make($auto_pwd);
 
         $user = UserApiService::manageUser($request, $hashed_random_password);
 
-        $this->sendUserCreationEmail($user, $auto_pwd);
-
         UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
+
+        $this->sendUserCreationEmail($user, $auto_pwd);
 
         return $this->respondCreateMessageOnly('success');
     }
@@ -148,7 +149,6 @@ class UserApiController extends Controller
             );
         }
 
-
         return $this->respondCollectionWithPagination('success', $query);
     }
 
@@ -158,9 +158,31 @@ class UserApiController extends Controller
         if ($user) {
             $user->update([
                 'password' => Hash::make($request->new_password),
-                'is_password_changed' => true
+                'account_status' => 'active',
             ]);
+            return $this->respondCreateMessageOnly('success');
+        } else {
+            return $this->respondErrorToken('Enter Correct Eamil');
         }
-        return $this->respondCreateMessageOnly('success');
+    }
+
+    public function forgetPassword(Request $request)
+    {
+        $user = User::firstWhere('email', $request->email);
+
+        if ($user) {
+            $auto_pwd = Str::random(8);
+
+            $hashed_random_password = Hash::make($auto_pwd);
+            $user->update([
+                'password' => $hashed_random_password,
+            ]);
+
+            $this->sendUserCreationEmail($user, $auto_pwd);
+
+            return $this->respondCreateMessageOnly('success');
+        } else {
+            return $this->respondErrorToken('Enter Correct Email');
+        }
     }
 }
