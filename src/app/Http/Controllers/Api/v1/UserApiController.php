@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Services\UserApiService;
 use App\Traits\EmailTrait;
 use App\Traits\ResponserTrait;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -39,20 +38,24 @@ class UserApiController extends Controller
     {
         // dd($request->all());
         $auto_pwd = Str::random(8);
-        // $auto_pwd = 'password';
         $hashed_random_password = Hash::make($auto_pwd);
 
-        $user = UserApiService::manageUser($request, $hashed_random_password);
+        $exist_user = User::firstWhere('email', $request->email);
 
-        if ($user == config('enums.users')['DUP']) {
+        if (!$exist_user) {
+            $user = UserApiService::createUser($request, $hashed_random_password);
+
+            // if ($user == config('enums.users')['DUP']) {
+            //     return $this->duplicateEntry();
+            // }
+            UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
+
+            // $this->sendUserCreationEmail($user, $auto_pwd);
+
+            return $this->respondCreateMessageOnly($user);
+        } else {
             return $this->duplicateEntry();
         }
-
-        UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
-
-        $this->sendUserCreationEmail($user, $auto_pwd);
-
-        return $this->respondCreateMessageOnly($user);
     }
 
     /**
@@ -75,7 +78,9 @@ class UserApiController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user = UserApiService::manageUser($request, $user);
+        $exist_user = User::firstWhere('email', $request->email);
+
+        $user = UserApiService::updateUser($request, $user);
 
         UserApiService::UacLogCreate(json_encode($request->all()), 'user_update');
 
@@ -92,11 +97,11 @@ class UserApiController extends Controller
     {
         try {
             $user = User::findOrFail($user->id);
-        } catch(\Exception $exception){
+        } catch (\Exception $exception) {
             $errormsg = 'No User to delete' . $exception->getCode();
             return $this->errorResponse($errormsg);
         }
-        
+
         $result = $user->delete();
         if ($result) {
             $user_response['result'] = true;
@@ -105,7 +110,6 @@ class UserApiController extends Controller
             $user_response['result'] = false;
             $user_response['message'] = "User was not Deleted, Try Again!";
         }
-        
 
         return $this->respondCreateMessageOnly($user_response['message']);
     }
