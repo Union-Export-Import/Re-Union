@@ -6,11 +6,8 @@ scalar DateTime
     @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
 type Query {
-
-    """
-    user api is here
-    """
     users: [User!]! @paginate(type: "paginator", model: "User")
+    permissions: [Permissiion!]! @paginate(type: "paginator", model: "Permission")
 
     user(id: ID @eq): User @find
 
@@ -18,16 +15,8 @@ type Query {
         name: String! @builder(method: "App\\Models\\User@filterUser")
     ): [User!]! @paginate
 
-    """_______________________________________________________________________________________"""
-
-
-    """
-    role api is here
-    """
     roles: [Role]! @paginate(type: "paginator", model: "Role")
     role(id: ID @eq): Role @find
-
-    """_______________________________________________________________________________________"""
 }
 
 type User {
@@ -41,6 +30,12 @@ type User {
 type Role {
     id: ID!
     role_name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+type Permissiion {
+    id: ID!
+    permission_name: String!
     created_at: DateTime!
     updated_at: DateTime!
 }
