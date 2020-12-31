@@ -14,11 +14,13 @@ class LoginApiController extends Controller
     public function login(Request $request)
     {
         $user = User::where('email', $request->email)->first();
-        
+
+        if ($user && Hash::check($request->password, $user->password) && $user->account_status == config('enums.account_status')['INIT']) {
+            return $this->respondCreateMessageOnly(config('enums.account_status')['INIT']);
+        }
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->respondErrorTokenExpire('invalid email or password');
-        } else if ($user && Hash::check($request->password, $user->password) && $user->account_status == 'init') {
-            return $this->respondCreateMessageOnly('initial_user');
         } else {
             $token = $user->createToken('login-user')->plainTextToken;
 

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\UserApiService;
 use App\Traits\EmailTrait;
 use App\Traits\ResponserTrait;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -43,11 +44,15 @@ class UserApiController extends Controller
 
         $user = UserApiService::manageUser($request, $hashed_random_password);
 
+        if ($user == config('enums.users')['DUP']) {
+            return $this->duplicateEntry();
+        }
+
         UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
 
         $this->sendUserCreationEmail($user, $auto_pwd);
 
-        return $this->respondCreateMessageOnly('success');
+        return $this->respondCreateMessageOnly($user);
     }
 
     /**
@@ -85,9 +90,24 @@ class UserApiController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        try {
+            $user = User::findOrFail($user->id);
+        } catch(\Exception $exception){
+            $errormsg = 'No User to delete' . $exception->getCode();
+            return $this->errorResponse($errormsg);
+        }
+        
+        $result = $user->delete();
+        if ($result) {
+            $user_response['result'] = true;
+            $user_response['message'] = "User Successfully Deleted!";
+        } else {
+            $user_response['result'] = false;
+            $user_response['message'] = "User was not Deleted, Try Again!";
+        }
+        
 
-        return $this->respondCreateMessageOnly('succes');
+        return $this->respondCreateMessageOnly($user_response['message']);
     }
 
     public function query(Request $request)
@@ -158,7 +178,7 @@ class UserApiController extends Controller
         if ($user) {
             $user->update([
                 'password' => Hash::make($request->new_password),
-                'account_status' => 'active',
+                'account_status' => config('enums.account_status')['ACTIVE'],
             ]);
             return $this->respondCreateMessageOnly('success');
         } else {

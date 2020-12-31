@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\UacLog;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,30 +18,40 @@ class UserApiService
         $user_id = $user && $user->id ? $user->id : null;
         // dd($user);
 
-        $user = User::updateOrcreate(
-            [
-                'id' => $user_id,
-            ],
-            [
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => $hashed_random_password,
-                'nrc' => $request->nrc,
-                'phone_number' => $request->phone_number,
-                'account_status' => $request->status,
-            ]
-        );
-        $user->roles()->sync($request->roles);
+        try {
+            $user = User::updateOrcreate(
+                [
+                    'id' => $user_id,
+                ],
+                [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => $hashed_random_password,
+                    'nrc' => $request->nrc,
+                    'phone_number' => $request->phone_number,
+                    'account_status' => config('enums.account_status')['INIT'],
+                ]
+            );
+            $user->roles()->sync($request->roles);
+        } catch (\Illuminate\Database\QueryException $exception) {
+            // You can check get the details of the error using `errorInfo`:
+
+            $errorCode = $exception->errorInfo[1];
+            if ($errorCode == 1062) {
+                return config('enums.users')['DUP'];// houston, we have a duplicate entry problem
+            }
+            // Return the response to the client..
+        }
+
         // $user->permissions()->sync($request->permissions);
 
         return $user;
-
     }
 
     public static function UacLogCreate($data, $type)
     {
         UacLog::create([
-            'maker' => auth()->user()->name,
+            'maker' => auth()->check() ? auth()->user()->name : "System",
             'payload' => $data,
             'type' => $type,
         ]);
