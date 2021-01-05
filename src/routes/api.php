@@ -28,8 +28,10 @@ use Illuminate\Support\Facades\Route;
 Route::group([], function () {
     // Route::post('user-update/{id}',[UserApiController::class,'update']);
     Route::post('login', [LoginApiController::class, 'login']);
-    Route::post('old_password_changed', [UserApiController::class, 'oldPasswordChange']);
+    Route::post('change-password', [UserApiController::class, 'oldPasswordChange']);
     Route::resource('users/union/admin/team', UserApiController::class);
+    //Forget Api
+    Route::post('forget-password', [UserApiController::class, 'forgetPassword']);
 
     Route::middleware(['auth:sanctum'])->group(function () {
         //Role
@@ -54,7 +56,6 @@ Route::group([], function () {
         //Asset
         Route::resource('assets', AssetApiController::class);
 
-        //Forget Api
-        Route::post('forget_password', [UserApiController::class, 'forgetPassword']);
+        
     });
 });

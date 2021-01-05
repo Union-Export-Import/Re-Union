@@ -299,6 +299,15 @@ trait ResponserTrait {
         return response()->json($result, 422);
     }
 
+    public function duplicateEntry()
+    {
+        $result = [
+            'message' => "Duplicate Entry"
+        ];
+
+        return response()->json($result, 409);
+    }
+
     // public function loginResponse($token){
     //     $data = [
     //         'token_type' => 'Bearer',
