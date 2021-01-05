@@ -50,7 +50,7 @@ class UserApiController extends Controller
             // }
             UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
 
-            // $this->sendUserCreationEmail($user, $auto_pwd);
+            $this->sendUserCreationEmail($user, $auto_pwd);
 
             return $this->respondCreateMessageOnly($user);
         } else {
