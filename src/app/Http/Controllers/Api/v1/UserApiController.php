@@ -209,4 +209,11 @@ class UserApiController extends Controller
             return $this->respondErrorToken('Enter Correct Email');
         }
     }
+
+    public function myProfile(Request $request)
+    {
+        $me = User::firstWhere('email', $request->email);
+
+        return $this->respondCollection("My profile", $me);
+    }
 }
