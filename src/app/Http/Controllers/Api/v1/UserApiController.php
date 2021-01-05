@@ -38,16 +38,24 @@ class UserApiController extends Controller
     {
         // dd($request->all());
         $auto_pwd = Str::random(8);
-        // $auto_pwd = 'password';
         $hashed_random_password = Hash::make($auto_pwd);
 
-        $user = UserApiService::manageUser($request, $hashed_random_password);
+        $exist_user = User::firstWhere('email', $request->email);
 
-        UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
+        if (!$exist_user) {
+            $user = UserApiService::createUser($request, $hashed_random_password);
 
-        $this->sendUserCreationEmail($user, $auto_pwd);
+            // if ($user == config('enums.users')['DUP']) {
+            //     return $this->duplicateEntry();
+            // }
+            UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
 
-        return $this->respondCreateMessageOnly('success');
+            // $this->sendUserCreationEmail($user, $auto_pwd);
+
+            return $this->respondCreateMessageOnly($user);
+        } else {
+            return $this->duplicateEntry();
+        }
     }
 
     /**
@@ -70,7 +78,9 @@ class UserApiController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user = UserApiService::manageUser($request, $user);
+        $exist_user = User::firstWhere('email', $request->email);
+
+        $user = UserApiService::updateUser($request, $user);
 
         UserApiService::UacLogCreate(json_encode($request->all()), 'user_update');
 
@@ -85,9 +95,23 @@ class UserApiController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        try {
+            $user = User::findOrFail($user->id);
+        } catch (\Exception $exception) {
+            $errormsg = 'No User to delete' . $exception->getCode();
+            return $this->errorResponse($errormsg);
+        }
 
-        return $this->respondCreateMessageOnly('succes');
+        $result = $user->delete();
+        if ($result) {
+            $user_response['result'] = true;
+            $user_response['message'] = "User Successfully Deleted!";
+        } else {
+            $user_response['result'] = false;
+            $user_response['message'] = "User was not Deleted, Try Again!";
+        }
+
+        return $this->respondCreateMessageOnly($user_response['message']);
     }
 
     public function query(Request $request)
@@ -158,7 +182,7 @@ class UserApiController extends Controller
         if ($user) {
             $user->update([
                 'password' => Hash::make($request->new_password),
-                'account_status' => 'active',
+                'account_status' => config('enums.account_status')['ACTIVE'],
             ]);
             return $this->respondCreateMessageOnly('success');
         } else {
