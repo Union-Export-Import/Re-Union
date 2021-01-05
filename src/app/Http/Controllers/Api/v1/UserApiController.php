@@ -210,10 +210,8 @@ class UserApiController extends Controller
         }
     }
 
-    public function myProfile(Request $request)
+    public function myProfile()
     {
-        $me = User::firstWhere('email', $request->email);
-
-        return $this->respondCollection("My profile", $me);
+        return request()->user();
     }
 }
