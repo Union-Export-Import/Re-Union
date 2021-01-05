@@ -20,7 +20,7 @@ class LoginApiController extends Controller
         }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return $this->respondErrorTokenExpire('invalid email or password');
+            return $this->loginFailed('invalid email or password');
         } else {
             $token = $user->createToken('login-user')->plainTextToken;
 

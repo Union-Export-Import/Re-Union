@@ -35,6 +35,9 @@ Route::group([], function () {
 
     Route::middleware(['auth:sanctum'])->group(function () {
         //Role
+
+        Route::get('me', [UserApiController::class, 'myProfile']);
+
         Route::apiResource('roles', RoleApiController::class);
 
         //Permission
