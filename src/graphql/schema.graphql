@@ -8,7 +8,7 @@ scalar DateTime
 
 type Query {
     users: [User!]! @paginate(type: "paginator", model: "User")
-    permissions: [Permissiion!]!
+    permissions: [Permission!]!
         @paginate(type: "paginator", model: "Permission")
 
     user(id: ID @eq): User @find
