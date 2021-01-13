@@ -9,7 +9,6 @@ trait ResponserTrait
 
     public function respondCollection($message, $data)
     {
-        echo $data;
         return response()->json([
             // 'code' => Response::HTTP_OK,
             'message' => $message,
