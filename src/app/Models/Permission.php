@@ -15,4 +15,12 @@ class Permission extends Model
     // {
     //     return $this->belongsTo(Role::class);
     // }
+
+    public function scopeWherePermissionName($query, $name)
+    {
+        if ($name) {
+            return $query->where('permission_name', $name);
+        }
+        return $query;
+    }
 }

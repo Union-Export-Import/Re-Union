@@ -185,4 +185,10 @@ class UserApiController extends Controller
             return $this->respondErrorToken('Enter Correct Email');
         }
     }
+
+    // public function filterUser($name)
+    // {
+    //     // return $name;
+    //     return User::filterUser($name)->get();
+    // }
 }

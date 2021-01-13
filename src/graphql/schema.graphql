@@ -1,3 +1,4 @@
+#import originaltype.graphql
 "A date string with format `Y-m-d`, e.g. `2011-05-23`."
 scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 
@@ -7,35 +8,27 @@ scalar DateTime
 
 type Query {
     users: [User!]! @paginate(type: "paginator", model: "User")
-    permissions: [Permissiion!]! @paginate(type: "paginator", model: "Permission")
+    permissions: [Permissiion!]!
+        @paginate(type: "paginator", model: "Permission")
 
     user(id: ID @eq): User @find
 
     filterUsers(
-        name: String! @builder(method: "App\\Models\\User@filterUser")
-    ): [User!]! @paginate
+        name: String = ""
+        first: Int
+        page: Int
+        email: String = ""
+    ): UsersPageInfo @field(resolver: "FilterQuery@filterUser")
+
+    filterPermissions(
+        name: String = ""
+        first: Int
+        page: Int
+    ): PermissionPageInfo @field(resolver: "FilterQuery@filterPermission")
+
+    filterRoles(name: String = "", first: Int, page: Int): RolePageInfo
+        @field(resolver: "FilterQuery@filterRoles")
 
     roles: [Role]! @paginate(type: "paginator", model: "Role")
     role(id: ID @eq): Role @find
-}
-
-type User {
-    id: ID!
-    name: String!
-    email: String!
-    created_at: DateTime
-    updated_at: DateTime
-}
-
-type Role {
-    id: ID!
-    role_name: String!
-    created_at: DateTime!
-    updated_at: DateTime!
-}
-type Permissiion {
-    id: ID!
-    permission_name: String!
-    created_at: DateTime!
-    updated_at: DateTime!
 }
