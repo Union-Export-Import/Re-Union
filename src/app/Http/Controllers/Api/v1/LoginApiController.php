@@ -15,9 +15,6 @@ class LoginApiController extends Controller
     {
         $user = User::where('email', $request->email)->first();
 
-        if ($user && Hash::check($request->password, $user->password) && $user->account_status == config('enums.account_status')['INIT']) {
-            return $this->respondCreateMessageOnly(config('enums.account_status')['INIT']);
-        }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->loginFailed('invalid email or password');
