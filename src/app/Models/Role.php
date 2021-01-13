@@ -17,4 +17,11 @@ class Role extends Model
         return $this->belongsToMany(Permission::class);
     }
 
+    public function scopeWhereRole($query,$role)
+    {
+        if ($role) {
+            return $query->where('title',$role);
+        }
+        return $query;
+    }
 }

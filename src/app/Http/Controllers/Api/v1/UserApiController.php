@@ -210,6 +210,11 @@ class UserApiController extends Controller
         }
     }
 
+    // public function filterUser($name)
+    // {
+    //     // return $name;
+    //     return User::filterUser($name)->get();
+    // }
     public function myProfile()
     {
         return request()->user();

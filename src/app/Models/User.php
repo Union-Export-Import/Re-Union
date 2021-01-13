@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,7 +22,7 @@ class User extends Authenticatable
         'password',
         'nrc',
         'phone_number',
-        'account_status'
+        'account_status',
     ];
 
     /**
@@ -55,9 +54,31 @@ class User extends Authenticatable
         return $this->belongsToMany(Permission::class);
     }
 
-
-    public function filterUser($query, $name)
+    public function scopeWhereUserName($query, $name)
     {
-        return $query->where('name', $name);
+        if ($name) {
+            return $query->where('name', 'LIKE', "%{$name}%");
+        }
+        return $query;
     }
+
+    public function scopeWhereUserEmail($query, $email)
+    {
+        if ($email) {
+            return $query->where('email', 'LIKE', "%{$email}%");
+        }
+    }
+
+    public function filterUser($query, $name, $email)
+    {
+
+        if ($name != null) {
+            $query->where('name', 'LIKE', '%' . $name . '%');
+        }
+        if ($email != null) {
+            $query->where('email', 'LIKE', '%' . $email . '%');
+        }
+        return $query;
+    }
+
 }
