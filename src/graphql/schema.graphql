@@ -18,16 +18,25 @@ type Query {
         first: Int
         page: Int
         email: String = ""
+        filter_column: String
+        filter_type: String
     ): UsersPageInfo @field(resolver: "FilterQuery@filterUser")
 
     filterPermissions(
         name: String = ""
         first: Int
         page: Int
+        filter_column: String
+        filter_type: String
     ): PermissionPageInfo @field(resolver: "FilterQuery@filterPermission")
 
-    filterRoles(name: String = "", first: Int, page: Int): RolePageInfo
-        @field(resolver: "FilterQuery@filterRoles")
+    filterRoles(
+        name: String = ""
+        first: Int
+        page: Int
+        filter_column: String
+        filter_type: String
+    ): RolePageInfo @field(resolver: "FilterQuery@filterRoles")
 
     roles: [Role]! @paginate(type: "paginator", model: "Role")
     role(id: ID @eq): Role @find

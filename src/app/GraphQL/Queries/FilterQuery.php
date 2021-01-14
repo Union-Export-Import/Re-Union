@@ -12,9 +12,11 @@ class FilterQuery
     {
         $first = $args["first"];
         $page = $args["page"];
+        $filter_column = $args["filter_column"];
+        $filter_type = $args["filter_type"];
 
         $users = User::whereUserName($args["name"])
-            ->whereUserEmail($args['email']);
+            ->whereUserEmail($args['email'])->orderBy($filter_column, $filter_type);
 
         return $this->showFilterPageData($users, $first, $page);
     }
@@ -24,7 +26,10 @@ class FilterQuery
         $name = $args["name"];
         $first = $args["first"];
         $page = $args["page"];
-        $permissions =  Permission::wherePermissionName($name);
+        $filter_column = $args["filter_column"];
+        $filter_type = $args["filter_type"];
+
+        $permissions =  Permission::wherePermissionName($name)->orderBy($filter_column, $filter_type);
 
         return $this->showFilterPageData($permissions, $first, $page);
     }
@@ -34,8 +39,10 @@ class FilterQuery
         $name = $args["name"];
         $first = $args["first"];
         $page = $args["page"];
+        $filter_column = $args["filter_column"];
+        $filter_type = $args["filter_type"];
 
-        $roles = Role::whereRole($name);
+        $roles = Role::whereRole($name)->orderBy($filter_column, $filter_type);
 
         return $this->showFilterPageData($roles, $first, $page);
     }

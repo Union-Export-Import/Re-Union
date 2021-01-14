@@ -15,14 +15,14 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            ['permission_name' => 'create_user', 'role_id' => '1'],
-            ['permission_name' => 'update_user', 'role_id' => '1'],
-            ['permission_name' => 'delete_user', 'role_id' => '1'],
-            ['permission_name' => 'view_user', 'role_id' => '1']
+            ['permission_name' => 'create_user'],
+            ['permission_name' => 'update_user'],
+            ['permission_name' => 'delete_user'],
+            ['permission_name' => 'view_user']
         ];
         foreach($permissions as $permission){
             Permission::create($permission);
         }
-        
+
     }
 }
