@@ -13,7 +13,7 @@ class CreatePivotOfPermissionRole extends Migration
      */
     public function up()
     {
-        Schema::table('permission_role', function (Blueprint $table) {
+        Schema::create('permission_role', function (Blueprint $table) {
             $table->unsignedBigInteger('permission_id');
             $table->unsignedBigInteger('role_id');
         });
