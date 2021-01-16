@@ -58,6 +58,7 @@ class FilterQuery
                 'hasNextPage' => $users->previousPageUrl(),
                 'hasPreviousPage' => $users->previousPageUrl(),
                 'total' => $users->total(),
+                'count' => $users->count(),
             ],
         ];
     }

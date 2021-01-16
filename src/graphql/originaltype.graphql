@@ -22,8 +22,8 @@ type Permission {
 type PageInfo {
     currentPage: Int
     lastPage: Int
-    perPage: Int
     hasPreviousPage: Boolean
+    perPage: Int
 }
 
 type UsersPageInfo {
