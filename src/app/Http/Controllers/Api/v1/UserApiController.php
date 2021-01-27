@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserApiQueryResource;
 use App\Models\User;
+use App\Services\FilterQueryService;
 use App\Services\UserApiService;
 use App\Traits\EmailTrait;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -162,41 +163,10 @@ class UserApiController extends Controller
     public function query(Request $request)
     {
 
-        // filterQuery("users", $request);
+        $users = User::with('roles');
 
+        $data = FilterQueryService::FilterQuery($request, $users);
 
-        $data = null;
-        //pagination params
-        $pagination_param = $request["paginationParam"];
-
-        //sorting params
-        $soring_params = $request["sortingParams"];
-
-        //filter params
-        $filter_params = $request["filter"]["filterParams"];
-
-        $query = DB::table($request["table_name"]);
-
-        foreach ($filter_params as $filter) {
-            $query->where($filter['key'], $filter["filterExpression"], $filter["textValue"]["value"]);
-        }
-
-        if (isset($soring_params)) {
-            $query->orderBy(
-                $soring_params['key'],
-                $soring_params['sortType']
-            );
-        }
-
-        if (isset($pagination_param)) {
-            $data = $query->paginate(
-                $pagination_param['pageSize'],
-                ['*'],
-                'page',
-                $pagination_param['pageNumber']
-            );
-        }
-
-        return $this->respondCollectionWithPagination('success', $data);
+        return $this->respondCollectionWithPagination('success', UserApiQueryResource::collection($data));
     }
 }

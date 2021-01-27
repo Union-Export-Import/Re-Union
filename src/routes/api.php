@@ -59,6 +59,5 @@ Route::group([], function () {
         //Asset
         Route::resource('assets', AssetApiController::class);
 
-        
     });
 });
