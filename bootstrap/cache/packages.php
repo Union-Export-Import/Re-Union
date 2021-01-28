@@ -52,6 +52,13 @@
       0 => 'Laravel\\Ui\\UiServiceProvider',
     ),
   ),
+  'mll-lab/laravel-graphql-playground' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'MLL\\GraphQLPlayground\\GraphQLPlaygroundServiceProvider',
+    ),
+  ),
   'nesbot/carbon' => 
   array (
     'providers' => 
@@ -64,6 +71,19 @@
     'providers' => 
     array (
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    ),
+  ),
+  'nuwave/lighthouse' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Nuwave\\Lighthouse\\LighthouseServiceProvider',
+      1 => 'Nuwave\\Lighthouse\\OrderBy\\OrderByServiceProvider',
+      2 => 'Nuwave\\Lighthouse\\SoftDeletes\\SoftDeletesServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'graphql' => 'Nuwave\\Lighthouse\\GraphQL',
     ),
   ),
 );
