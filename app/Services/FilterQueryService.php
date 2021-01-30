@@ -19,12 +19,12 @@ class FilterQueryService
         $query = $table;
         if ($filter_logic == "AND") {
             foreach ($filter_params as $filter) {
-                $query->where($filter['key'], $filter["filterExpression"], "%{$filter["textValue"]["value"]}%");
+                $query->where($filter['key'], $filter["filterExpression"], $filter["textValue"]["value"]);
             }
         }
         if ($filter_logic == "OR") {
             foreach ($filter_params as $filter) {
-                $query->orWhere($filter['key'], $filter["filterExpression"], "%{$filter["textValue"]["value"]}%");
+                $query->orWhere($filter['key'], $filter["filterExpression"], $filter["textValue"]["value"]);
             }
         }
         //Logic with OR AND
