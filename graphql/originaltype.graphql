@@ -1,0 +1,41 @@
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type Role {
+    id: ID!
+    title: String!
+    created_at: DateTime
+    updated_at: DateTime
+}
+type Permission {
+    id: ID!
+    permission_name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+type PageInfo {
+    currentPage: Int
+    lastPage: Int
+    hasPreviousPage: Boolean
+    perPage: Int
+}
+
+type UsersPageInfo {
+    data: [User!]
+    page: PageInfo
+}
+type PermissionPageInfo {
+    data: [Permission!]
+    page: PageInfo
+}
+
+type RolePageInfo {
+    data: [Role!]
+    page: PageInfo
+}

@@ -1,0 +1,43 @@
+#import originaltype.graphql
+"A date string with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+    users: [User!]! @paginate(type: "paginator", model: "User")
+    permissions: [Permission!]!
+        @paginate(type: "paginator", model: "Permission")
+
+    user(id: ID @eq): User @find
+
+    filterUsers(
+        name: String = ""
+        first: Int
+        page: Int
+        email: String = ""
+        filter_column: String
+        filter_type: String
+    ): UsersPageInfo @field(resolver: "FilterQuery@filterUser")
+
+    filterPermissions(
+        name: String = ""
+        first: Int
+        page: Int
+        filter_column: String
+        filter_type: String
+    ): PermissionPageInfo @field(resolver: "FilterQuery@filterPermission")
+
+    filterRoles(
+        name: String = ""
+        first: Int
+        page: Int
+        filter_column: String
+        filter_type: String
+    ): RolePageInfo @field(resolver: "FilterQuery@filterRoles")
+
+    roles: [Role]! @paginate(type: "paginator", model: "Role")
+    role(id: ID @eq): Role @find
+}
