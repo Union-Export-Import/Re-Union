@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\PermissionRequest;
-use App\Models\Permission;
 use App\Models\Role;
+use App\Models\Permission;
+use Illuminate\Http\Request;
 use App\Models\RolePermission;
 use App\Traits\ResponserTrait;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Services\FilterQueryService;
+use App\Http\Requests\PermissionRequest;
 
 class PermissionApiController extends Controller
 {
@@ -77,4 +79,14 @@ class PermissionApiController extends Controller
 
         return $this->respondSuccessMsgOnly('success');
     }
+
+    public function query(Request $request)
+    {
+        $permissions = DB::table('permissions');
+
+        $data = FilterQueryService::FilterQuery($request, $permissions);
+
+        return $this->respondCollectionWithPagination('success', $data);
+    }
+
 }

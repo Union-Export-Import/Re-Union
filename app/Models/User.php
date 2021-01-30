@@ -49,11 +49,6 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
-    public function permissions()
-    {
-        return $this->belongsToMany(Permission::class);
-    }
-
     public function scopeWhereUserName($query, $name)
     {
         if ($name) {
@@ -81,4 +76,13 @@ class User extends Authenticatable
         return $query;
     }
 
+    public function scopeWhereRole($query, $role)
+    {
+        if ($role) {
+            return $query->whereHas('roles', function ($q) use ($role) {
+                $q->whereIn('role_id', $role);
+            });
+        }
+        return $query;
+    }
 }

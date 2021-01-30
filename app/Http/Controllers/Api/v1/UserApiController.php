@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserApiQueryResource;
 use App\Models\User;
+use App\Services\FilterQueryService;
 use App\Services\UserApiService;
 use App\Traits\EmailTrait;
 use App\Traits\ResponserTrait;
@@ -114,68 +116,6 @@ class UserApiController extends Controller
         return $this->respondCreateMessageOnly($user_response['message']);
     }
 
-    public function query(Request $request)
-    {
-        $query = null;
-
-        $filterExp = $request['filter']['filterParams'];
-
-        if (count($filterExp) != 0) {
-            foreach ($filterExp as $filterParam) {
-                if ($filterParam['filterType'] == 'text') {
-                    if ($filterParam['filterExpression'] == 'equals') {
-                        $filterQuery = User::where($filterParam['key'], '=', $filterParam['textValue']['value']);
-                        $query = clone $filterQuery;
-                    }
-                    if ($filterParam['filterExpression'] == 'notEquals') {
-                        $filterQuery = User::where($filterParam['key'], '<>', $filterParam['textValue']['value']);
-                        $query = clone $filterQuery;
-                    }
-                    if ($filterParam['filterExpression'] == 'contain') {
-                        $filterQuery = User::where($filterParam['key'], 'LIKE', '%' . $filterParam['textValue']['value'] . '%');
-                        $query = clone $filterQuery;
-                    }
-                }
-
-                if ($filterParam['filterType'] == 'textArray') {
-                    if ($filterParam['filterExpression'] == 'equals') {
-                        $filterQuery = User::whereIn($filterParam['key'], $filterParam['textArrayValues']['list']);
-                        $query = clone $filterQuery;
-                    }
-                    if ($filterParam['filterExpression'] == 'notEquals') {
-                        $filterQuery = User::whereNotIn($filterParam['key'], $filterParam['textArrayValues']['list']);
-                        $query = clone $filterQuery;
-                    }
-                }
-            }
-        }
-
-        // if (count($request['roles']) != 0 || $request['roles'] != null) {
-        //     $users = $query->with('roles', 'permissions')->get();
-        //     foreach ($users as $user) :
-        //         foreach ($user->roles as $r) :
-
-        //             if($r['role_name'] == $request[roles])
-
-        //         endforeach;
-        //     endforeach;
-        // }
-
-        if ($request != null) {
-            $query = $query->orderBy(
-                $request['sortingParams']['key'],
-                $request['sortingParams']['sortType']
-            )->with('roles', 'permissions')->paginate(
-                $request['paginationParam']['pageSize'],
-                ['*'],
-                'page',
-                $request['paginationParam']['pageNumber']
-            );
-        }
-
-        return $this->respondCollectionWithPagination('success', $query);
-    }
-
     public function oldPasswordChange(Request $request)
     {
         $user = User::firstWhere('email', $request->email);
@@ -218,5 +158,17 @@ class UserApiController extends Controller
     public function myProfile()
     {
         return request()->user();
+    }
+
+    public function query(Request $request)
+    {
+        //Search roles with array
+        $role = $request["filterRole"];
+        // dd($role);
+        $users = User::with('roles')->whereRole($role);
+        // return $users->get();
+        $data = FilterQueryService::FilterQuery($request, $users);
+
+        return $this->respondCollectionWithPagination('success', UserApiQueryResource::collection($data));
     }
 }
