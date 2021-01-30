@@ -17,12 +17,8 @@ class UserApiDetailResourse extends JsonResource
         $resource = $this->resource;
 
         $roles = RoleResource::collection($resource->roles);
-        $permissions = RoleResource::collection($resource->roles);
-
         unset($resource->roles);
-        
         $resource->roles = $roles;
-        $resource->permissions = $permissions;
         return $resource;
     }
 }
