@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\UacLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Services\FilterQueryService;
+use App\Traits\ResponserTrait;
 
 class UacLogController extends Controller
 {
+    use ResponserTrait;
     /**
      * Display a listing of the resource.
      *
@@ -81,5 +85,14 @@ class UacLogController extends Controller
     public function destroy(UacLog $uacLog)
     {
         //
+    }
+    public function query(Request $request)
+    {
+        $uacLogs = DB::table('uac_logs');
+
+        $data = FilterQueryService::FilterQuery($request, $uacLogs);
+
+        return $this->respondCollectionWithPagination('success', $data);
+
     }
 }

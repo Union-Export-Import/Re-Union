@@ -9,5 +9,5 @@ class UacLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['maker', 'payload', 'type'];
+    protected $fillable = ['maker', 'payload', 'type', 'user_id'];
 }

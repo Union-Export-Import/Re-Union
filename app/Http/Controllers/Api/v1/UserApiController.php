@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\UserApiDetailResourse;
+use App\Models\UacLog;
 use App\Models\User;
 use App\Services\FilterQueryService;
 use App\Services\UserApiService;
@@ -24,7 +26,7 @@ class UserApiController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles', 'permissions')->paginate(10);
+        $users = User::with('roles')->paginate(10);
 
         return $this->respondCollectionWithPagination('success', $users);
     }
@@ -49,7 +51,7 @@ class UserApiController extends Controller
             // if ($user == config('enums.users')['DUP']) {
             //     return $this->duplicateEntry();
             // }
-            UserApiService::UacLogCreate(json_encode($request->all()), 'user_create');
+            UserApiService::UacLogCreate(json_encode($request->all()), 'user_create', $user->id);
 
             $this->sendUserCreationEmail($user, $auto_pwd);
 
@@ -67,9 +69,10 @@ class UserApiController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return $this->respondCollection('success', new UserApiDetailResourse($user));
     }
 
+   
     /**
      * Update the specified resource in storage.
      *
@@ -83,7 +86,7 @@ class UserApiController extends Controller
 
         $user = UserApiService::updateUser($request, $user);
 
-        UserApiService::UacLogCreate(json_encode($request->all()), 'user_update');
+        UserApiService::UacLogCreate(json_encode($request->all()), 'user_update', $user->id);
 
         return $this->respondCreateMessageOnly('success');
     }

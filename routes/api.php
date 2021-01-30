@@ -8,8 +8,7 @@ use App\Http\Controllers\Api\v1\PermissionApiController;
 use App\Http\Controllers\Api\v1\RoleApiController;
 use App\Http\Controllers\Api\v1\SupplierApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
-use App\Models\Asset;
-use App\Models\Permission;
+use App\Http\Controllers\UacLogController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,12 +28,13 @@ use Illuminate\Support\Facades\Route;
 Route::group([], function () {
     // Route::post('user-update/{id}',[UserApiController::class,'update']);
     Route::post('login', [LoginApiController::class, 'login']);
-    Route::post('change-password', [UserApiController::class, 'oldPasswordChange']);
     Route::resource('users/union/admin/team', UserApiController::class);
     //Forget Api
     Route::post('forget-password', [UserApiController::class, 'forgetPassword']);
 
     Route::middleware(['auth:sanctum'])->group(function () {
+        //Change Password
+        Route::post('change-password', [UserApiController::class, 'oldPasswordChange']);
         //Role
         Route::get('me', [UserApiController::class, 'myProfile']);
 
@@ -47,8 +47,9 @@ Route::group([], function () {
 
         //User
         Route::resource('users', UserApiController::class);
-        Route::post('users/query', [UserApiController::class, 'query']);
+        Route::post('uacLogs/query', [UacLogController::class, 'query']);
 
+        Route::post('users/query', [UserApiController::class, 'query']);
 
         //Customer
         Route::resource('customers', CustomerApiController::class);

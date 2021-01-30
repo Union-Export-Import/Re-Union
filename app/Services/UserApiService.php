@@ -39,12 +39,13 @@ class UserApiService
         return $user;
     }
 
-    public static function UacLogCreate($data, $type)
+    public static function UacLogCreate($data, $type, $user)
     {
         UacLog::create([
             'maker' => auth()->check() ? auth()->user()->name : "System",
             'payload' => $data,
             'type' => $type,
+            'user_id' => $user
         ]);
     }
 }

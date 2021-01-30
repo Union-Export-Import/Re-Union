@@ -5,7 +5,7 @@ namespace App\Services;
 class FilterQueryService
 {
 
-    public static function FilterQuery($request, $users)
+    public static function FilterQuery($request, $table)
     {
         // $data = null;
         //pagination params
@@ -16,7 +16,7 @@ class FilterQueryService
         //filter params
         $filter_params = $request["filter"]["filterParams"];
         $filter_logic = $request["filter"]["filterLogic"];
-        $query = $users;
+        $query = $table;
         if ($filter_logic == "AND") {
             foreach ($filter_params as $filter) {
                 $query->where($filter['key'], $filter["filterExpression"], "%{$filter["textValue"]["value"]}%");
