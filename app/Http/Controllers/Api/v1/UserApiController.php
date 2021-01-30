@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Resources\UserApiQueryResource;
 use App\Models\User;
 use App\Services\FilterQueryService;
 use App\Services\UserApiService;
@@ -169,6 +168,6 @@ class UserApiController extends Controller
         // return $users->get();
         $data = FilterQueryService::FilterQuery($request, $users);
 
-        return $this->respondCollectionWithPagination('success', UserApiQueryResource::collection($data));
+        return $this->respondCollectionWithPagination('success', $data);
     }
 }
