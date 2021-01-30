@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\v1\RoleApiController;
 use App\Http\Controllers\Api\v1\SupplierApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
 use App\Models\Asset;
+use App\Models\Permission;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,23 +36,25 @@ Route::group([], function () {
 
     Route::middleware(['auth:sanctum'])->group(function () {
         //Role
-
         Route::get('me', [UserApiController::class, 'myProfile']);
 
         Route::apiResource('roles', RoleApiController::class);
+        Route::post('roles/query', [RoleApiController::class, 'query']);
 
         //Permission
         Route::apiResource('permissions', PermissionApiController::class);
+        Route::post('permissions/query', [PermissionApiController::class, 'query']);
 
         //User
         Route::resource('users', UserApiController::class);
+        Route::post('users/query', [UserApiController::class, 'query']);
+
 
         //Customer
         Route::resource('customers', CustomerApiController::class);
 
         //Supplier
         Route::resource('suppliers', SupplierApiController::class);
-        Route::post('users/query', [UserApiController::class, 'query']);
 
         //AssetType
         Route::resource('asset_types', AssetTypeApiController::class);

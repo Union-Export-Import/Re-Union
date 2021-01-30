@@ -15,11 +15,19 @@ class FilterQueryService
 
         //filter params
         $filter_params = $request["filter"]["filterParams"];
+        $filter_logic = $request["filter"]["filterLogic"];
         $query = $users;
-
-        foreach ($filter_params as $filter) {
-            $query->where($filter['key'], $filter["filterExpression"], "%{$filter["textValue"]["value"]}%");
+        if ($filter_logic == "AND") {
+            foreach ($filter_params as $filter) {
+                $query->where($filter['key'], $filter["filterExpression"], "%{$filter["textValue"]["value"]}%");
+            }
         }
+        if ($filter_logic == "OR") {
+            foreach ($filter_params as $filter) {
+                $query->orWhere($filter['key'], $filter["filterExpression"], "%{$filter["textValue"]["value"]}%");
+            }
+        }
+        //Logic with OR AND
 
         if (isset($soring_params)) {
             $query->orderBy(

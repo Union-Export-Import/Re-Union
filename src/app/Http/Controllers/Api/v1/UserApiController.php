@@ -162,9 +162,11 @@ class UserApiController extends Controller
 
     public function query(Request $request)
     {
-
-        $users = User::with('roles');
-
+        //Search roles with array
+        $role = $request["filterRole"];
+        // dd($role);
+        $users = User::with('roles')->whereRole($role);
+        // return $users->get();
         $data = FilterQueryService::FilterQuery($request, $users);
 
         return $this->respondCollectionWithPagination('success', UserApiQueryResource::collection($data));

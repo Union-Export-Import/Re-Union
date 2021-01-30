@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
+use Highlight\Mode;
 use App\Models\Role;
-use App\Services\RoleApiService;
-use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
+use App\Traits\ResponserTrait;
+use App\Services\RoleApiService;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Services\FilterQueryService;
+use Illuminate\Database\Eloquent\Model;
 
 class RoleApiController extends Controller
 {
@@ -75,4 +79,15 @@ class RoleApiController extends Controller
 
         return $this->respondCreateMessageOnly('success');
     }
+
+    public function query(Request $request)
+    {
+        //Search roles with array
+        $roles = DB::table('roles');
+
+        $data = FilterQueryService::FilterQuery($request, $roles);
+
+        return $this->respondCollectionWithPagination('success', $data);
+    }
+
 }
