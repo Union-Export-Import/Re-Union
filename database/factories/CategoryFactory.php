@@ -22,7 +22,11 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
+<<<<<<< HEAD
+            //
+=======
             'name' => $this->faker->name,
+>>>>>>> 6619eb6913ce20239ba7110b854b48421e469018
         ];
     }
 }
