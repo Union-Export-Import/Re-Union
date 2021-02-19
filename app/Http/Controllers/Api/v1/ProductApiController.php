@@ -118,6 +118,6 @@ class ProductApiController extends Controller
     {
         $data = ProductApiService::filterProduct($request);
 
-        return $this->respondCollectionWithPagination('success', $data);
+        return $this->respondCollectionWithPagination('success', ProductListResource::collection($data));
     }
 }
