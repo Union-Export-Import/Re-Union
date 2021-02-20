@@ -22,6 +22,7 @@ class FilterQueryService
                 $query->where($filter['key'], $filter["filterExpression"], $filter["textValue"]["value"]);
             }
         }
+        // dd($query->get());
         if ($filter_logic == "OR") {
             foreach ($filter_params as $filter) {
                 $query->orWhere($filter['key'], $filter["filterExpression"], $filter["textValue"]["value"]);
