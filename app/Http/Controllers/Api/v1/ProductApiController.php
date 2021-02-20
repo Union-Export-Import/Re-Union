@@ -14,7 +14,6 @@ use App\Services\FilterQueryService;
 use App\Services\ProductApiService;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ProductApiController extends Controller
 {
@@ -117,6 +116,12 @@ class ProductApiController extends Controller
     public function query(Request $request)
     {
         $data = ProductApiService::filterProduct($request);
+
+        $products = Product::whereProductColor($request["color_id"])
+                        ->whereProductSize($request["size_id"])
+                        ->whereProductSupplier($request['supplier_id']);
+
+        $data = FilterQueryService::FilterQuery($request, $products);
 
         return $this->respondCollectionWithPagination('success', ProductListResource::collection($data));
     }

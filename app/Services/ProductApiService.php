@@ -97,7 +97,7 @@ class ProductApiService
        $products = Product::whereProductName($request->name)
                 ->whereProductCode($request->product_code)
                 ->whereProductColor($request->color_id)
-                ->whereProductColor($request->size_id)
+                ->whereProductSize($request->size_id)
                 ->whereProductSupplier($request->supplier_id)->paginate(10);
         return $products;
     }
