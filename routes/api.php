@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\v1\LoginApiController;
 use App\Http\Controllers\Api\v1\PermissionApiController;
 use App\Http\Controllers\Api\v1\ProductApiController;
 use App\Http\Controllers\Api\v1\RoleApiController;
+use App\Http\Controllers\Api\v1\SaleApiController;
 use App\Http\Controllers\Api\v1\SupplierApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
 use App\Http\Controllers\UacLogController;
@@ -73,6 +74,11 @@ Route::group([], function () {
 
         Route::resource('categories', CategoryApiController::class);
         Route::post('categories/query', [CategoryApiController::class, 'query']);
+
+        //Sale Product
+        Route::resource('sales', SaleApiController::class);
+
+        Route::post('sales/completePayment', [SaleApiController::class, 'completePayment']);
 
     });
 });
