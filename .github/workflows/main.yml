@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the development branch
   push:
     branches: [ development ]
-  pull_request:
-    branches: [ development ]
 
   # Allows you to run this workflow manually from the Actions tab
   # workflow_dispatch:
@@ -23,7 +21,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Deploy NodeJS app
-        uses: appleboy/ssh-action@v0.1.2
+        uses: actions/checkout@v2
         with:
           host: ${{secrets.SSH_HOST}} # IP address of the server you wish to ssh into
           key: ${{secrets.SSH_KEY}} # Private or public key of the server
