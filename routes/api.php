@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AssetApiController;
-use App\Http\Controllers\Api\V1\AssetTypeApiController;
+use App\Http\Controllers\Api\v1\AssetTypeApiController;
 use App\Http\Controllers\Api\v1\CategoryApiController;
 use App\Http\Controllers\Api\v1\CustomerApiController;
 use App\Http\Controllers\Api\v1\LoginApiController;
