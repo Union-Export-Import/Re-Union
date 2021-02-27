@@ -34,7 +34,7 @@ class SupplierApiController extends Controller
     {
         $user = SupplierApiService::manageSupplier($request);
 
-        UserApiService::UacLogCreate(json_encode($request->all()), 'supplier_create');
+        // UserApiService::UacLogCreate(json_encode($request->all()), 'supplier_create');
 
         return $this->respondCreateMessageOnly('success');
 
