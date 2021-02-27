@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
-
+namespace App\Http\Controllers\Api\v1;
 use App\Models\AssetType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
