@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Deploy
 
 # Controls when the action will run. 
 on:
@@ -20,7 +20,7 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Deploy NodeJS app
+      - name: Deploy Union Export/Import backend
         uses: actions/checkout@v2
         with:
           host: ${{secrets.SSH_HOST}} # IP address of the server you wish to ssh into
