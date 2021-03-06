@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use Highlight\Mode;
-use App\Models\Role;
-use Illuminate\Http\Request;
-use App\Traits\ResponserTrait;
-use App\Services\RoleApiService;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Services\FilterQueryService;
+use App\Services\RoleApiService;
+use App\Traits\ResponserTrait;
+use Highlight\Mode;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class RoleApiController extends Controller
 {
@@ -22,6 +23,8 @@ class RoleApiController extends Controller
      */
     public function index()
     {
+        abort_if(Gate::denies('role_access'), $this->respondPermissionDenied());
+
         $roles = Role::with('permissions')->paginate(10);
 
         return $this->respondCollectionWithPagination('success', $roles);
@@ -35,6 +38,8 @@ class RoleApiController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('role_create'), $this->respondPermissionDenied());
+
         RoleApiService::manageRole($request);
 
         return $this->respondCreateMessageOnly('success');
@@ -48,6 +53,8 @@ class RoleApiController extends Controller
      */
     public function show(Role $role)
     {
+        abort_if(Gate::denies('role_show'), $this->respondPermissionDenied());
+
         $roleData = Role::with('permissions')->findOrFail($role->id);
 
         return $this->respondCollection('success', $roleData);
@@ -62,6 +69,8 @@ class RoleApiController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        abort_if(Gate::denies('role_update'), $this->respondPermissionDenied());
+
         RoleApiService::manageRole($request, $role);
 
         return $this->respondCreateMessageOnly('success');
@@ -75,6 +84,8 @@ class RoleApiController extends Controller
      */
     public function destroy(Role $role)
     {
+        abort_if(Gate::denies('role_delete'), $this->respondPermissionDenied());
+
         $role->delete();
 
         return $this->respondCreateMessageOnly('success');
@@ -82,6 +93,8 @@ class RoleApiController extends Controller
 
     public function query(Request $request)
     {
+        abort_if(Gate::denies('role_query'), $this->respondPermissionDenied());
+
         //Search roles with array
         $roles = DB::table('roles');
 

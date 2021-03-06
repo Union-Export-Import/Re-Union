@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerApiRequest;
 use App\Models\Customer;
 use App\Services\CustomerApiService;
+use App\Services\FilterQueryService;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class CustomerApiController extends Controller
 {
@@ -19,6 +22,8 @@ class CustomerApiController extends Controller
      */
     public function index()
     {
+        abort_if(Gate::denies('customer_access'), $this->respondPermissionDenied());
+
         $customers = Customer::latest()->paginate(10);
 
         return $this->respondCollectionWithPagination('success', $customers);
@@ -32,6 +37,8 @@ class CustomerApiController extends Controller
      */
     public function store(CustomerApiRequest $request)
     {
+        abort_if(Gate::denies('customer_create'), $this->respondPermissionDenied());
+
         CustomerApiService::manageCustomer($request);
 
         return $this->respondCreateMessageOnly('success');
@@ -57,6 +64,8 @@ class CustomerApiController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
+        abort_if(Gate::denies('customer_update'), $this->respondPermissionDenied());
+
         CustomerApiService::manageCustomer($request);
 
         return $this->respondCreateMessageOnly('success');
@@ -70,9 +79,21 @@ class CustomerApiController extends Controller
      */
     public function destroy(Customer $customer)
     {
+        abort_if(Gate::denies('customer_delete'), $this->respondPermissionDenied());
+
         $customer->delete();
 
         return $this->respondCreateMessageOnly('succes');
+    }
 
+    public function query(Request $request)
+    {
+        abort_if(Gate::denies('customer_query'), $this->respondPermissionDenied());
+
+        $customers = DB::table('customers');
+
+        $data = FilterQueryService::FilterQuery($request, $customers);
+
+        return $this->respondCollectionWithPagination('success', $data);
     }
 }

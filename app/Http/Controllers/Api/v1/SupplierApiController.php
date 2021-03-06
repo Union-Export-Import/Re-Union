@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Supplier;
+use App\Services\FilterQueryService;
 use App\Services\SupplierApiService;
 use App\Services\UserApiService;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class SupplierApiController extends Controller
 {
@@ -19,6 +22,8 @@ class SupplierApiController extends Controller
      */
     public function index()
     {
+        abort_if(Gate::denies('supplier_access'), $this->respondPermissionDenied());
+
         $suppliers = Supplier::latest()->paginate(10);
 
         return $this->respondCollectionWithPagination('success', $suppliers);
@@ -32,6 +37,8 @@ class SupplierApiController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('supplier_create'), $this->respondPermissionDenied());
+
         $user = SupplierApiService::manageSupplier($request);
 
         // UserApiService::UacLogCreate(json_encode($request->all()), 'supplier_create');
@@ -60,6 +67,8 @@ class SupplierApiController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
+        abort_if(Gate::denies('supplier_update'), $this->respondPermissionDenied());
+
         $user = SupplierApiService::manageSupplier($request, $supplier);
 
         UserApiService::UacLogCreate(json_encode($request->all()), 'supplier_update');
@@ -75,8 +84,21 @@ class SupplierApiController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
+        abort_if(Gate::denies('supplier_delete'), $this->respondPermissionDenied());
+
         $supplier->delete();
 
         return $this->respondSuccessMsgOnly('success');
+    }
+
+    public function query(Request $request)
+    {
+        abort_if(Gate::denies('supplier_query'), $this->respondPermissionDenied());
+
+        $suppliers = DB::table('suppliers');
+
+        $data = FilterQueryService::FilterQuery($request, $suppliers);
+
+        return $this->respondCollectionWithPagination('success', $data);
     }
 }

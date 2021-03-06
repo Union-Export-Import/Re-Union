@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Models\Role;
-use App\Models\Permission;
-use Illuminate\Http\Request;
-use App\Models\RolePermission;
-use App\Traits\ResponserTrait;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Services\FilterQueryService;
 use App\Http\Requests\PermissionRequest;
+use App\Models\Permission;
+use App\Services\FilterQueryService;
+use App\Traits\ResponserTrait;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PermissionApiController extends Controller
 {
@@ -22,6 +21,8 @@ class PermissionApiController extends Controller
      */
     public function index()
     {
+        abort_if(Gate::denies('permission_access'), $this->respondPermissionDenied());
+
         $permissions = Permission::paginate(10);
 
         return $this->respondCollectionWithPagination('success', $permissions);
@@ -35,6 +36,8 @@ class PermissionApiController extends Controller
      */
     public function store(PermissionRequest $request)
     {
+        abort_if(Gate::denies('permission_create'), $this->respondPermissionDenied());
+
         Permission::create([
             'permission_name' => $request->permission_name,
         ]);
@@ -61,6 +64,8 @@ class PermissionApiController extends Controller
      */
     public function update(Request $request, Permission $permission)
     {
+        abort_if(Gate::denies('permission_update'), $this->respondPermissionDenied());
+
         $permission->update([
             'permission_name' => $request->permission_name,
         ]);
@@ -75,6 +80,8 @@ class PermissionApiController extends Controller
      */
     public function destroy(Permission $permission)
     {
+        abort_if(Gate::denies('permission_delete'), $this->respondPermissionDenied());
+
         $permission->delete();
 
         return $this->respondSuccessMsgOnly('success');
@@ -82,6 +89,8 @@ class PermissionApiController extends Controller
 
     public function query(Request $request)
     {
+        abort_if(Gate::denies('permission_query'), $this->respondPermissionDenied());
+
         $permissions = DB::table('permissions');
 
         $data = FilterQueryService::FilterQuery($request, $permissions);
