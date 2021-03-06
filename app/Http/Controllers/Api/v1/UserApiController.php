@@ -5,15 +5,16 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserApiDetailResourse;
-use App\Models\UacLog;
 use App\Models\User;
 use App\Services\FilterQueryService;
 use App\Services\UserApiService;
 use App\Traits\EmailTrait;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserApiController extends Controller
 {
@@ -26,6 +27,8 @@ class UserApiController extends Controller
      */
     public function index()
     {
+        abort_if(Gate::denies('user_access'), $this->respondPermissionDenied());
+
         $users = User::with('roles')->paginate(10);
 
         return $this->respondCollectionWithPagination('success', $users);
@@ -39,6 +42,7 @@ class UserApiController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        abort_if(Gate::denies('user_create'), $this->respondPermissionDenied());
         // dd($request->all());
         $auto_pwd = Str::random(8);
         $hashed_random_password = Hash::make($auto_pwd);
@@ -69,10 +73,11 @@ class UserApiController extends Controller
      */
     public function show(User $user)
     {
+        abort_if(Gate::denies('user_show'), $this->respondPermissionDenied());
+
         return $this->respondCollection('success', new UserApiDetailResourse($user));
     }
 
-   
     /**
      * Update the specified resource in storage.
      *
@@ -82,6 +87,8 @@ class UserApiController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        abort_if(Gate::denies('user_update'), $this->respondPermissionDenied());
+
         $exist_user = User::firstWhere('email', $request->email);
 
         $user = UserApiService::updateUser($request, $user);
@@ -99,6 +106,8 @@ class UserApiController extends Controller
      */
     public function destroy(User $user)
     {
+        abort_if(Gate::denies('user_delete'), $this->respondPermissionDenied());
+
         try {
             $user = User::findOrFail($user->id);
         } catch (\Exception $exception) {
@@ -120,6 +129,8 @@ class UserApiController extends Controller
 
     public function oldPasswordChange(Request $request)
     {
+        abort_if(Gate::denies('old_password_change'), $this->respondPermissionDenied());
+
         $user = User::firstWhere('email', $request->email);
         if ($user) {
             $user->update([
@@ -134,6 +145,8 @@ class UserApiController extends Controller
 
     public function forgetPassword(Request $request)
     {
+        abort_if(Gate::denies('forget_password'), $this->respondPermissionDenied());
+
         $user = User::firstWhere('email', $request->email);
 
         if ($user) {
@@ -164,11 +177,13 @@ class UserApiController extends Controller
 
     public function query(Request $request)
     {
+        abort_if(Gate::denies('user_query'), $this->respondPermissionDenied());
+
         //Search roles with array
         $role = $request["filterRole"];
-        // dd($role);
+
         $users = User::with('roles')->whereRole($role);
-        // return $users->get();
+
         $data = FilterQueryService::FilterQuery($request, $users);
 
         return $this->respondCollectionWithPagination('success', $data);

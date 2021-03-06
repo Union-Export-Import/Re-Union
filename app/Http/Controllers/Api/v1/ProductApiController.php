@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductApiRequest;
-use App\Http\Resources\ProductDetailResource;
-use App\Http\Resources\ProductListResource;
 use App\Models\Product;
+use App\Models\ProductSize;
 use App\Models\ProductColor;
 use App\Models\ProductPrice;
-use App\Models\ProductSize;
-use App\Services\FilterQueryService;
-use App\Services\ProductApiService;
-use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
+use App\Traits\ResponserTrait;
+use App\Services\ProductApiService;
+use App\Http\Controllers\Controller;
+use App\Services\FilterQueryService;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\ProductApiRequest;
+use App\Http\Resources\ProductListResource;
+use App\Http\Resources\ProductDetailResource;
 
 class ProductApiController extends Controller
 {
@@ -25,6 +26,8 @@ class ProductApiController extends Controller
      */
     public function index()
     {
+        abort_if(Gate::denies('product_access'), $this->respondPermissionDenied());
+
         $products = Product::paginate(10);
 
         return $this->respondCollectionWithPagination("success", ProductListResource::collection($products));
@@ -38,6 +41,8 @@ class ProductApiController extends Controller
      */
     public function store(ProductApiRequest $request)
     {
+        abort_if(Gate::denies('product_create'), $this->respondPermissionDenied());
+
         $product = ProductApiService::createProduct($request);
 
         foreach ($request->prices as $price) {
@@ -61,6 +66,8 @@ class ProductApiController extends Controller
      */
     public function show(Product $product)
     {
+        abort_if(Gate::denies('product_show'), $this->respondPermissionDenied());
+
         return $this->respondcreateCollection('success', new ProductDetailResource($product));
     }
 
@@ -73,6 +80,8 @@ class ProductApiController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        abort_if(Gate::denies('product_update'), $this->respondPermissionDenied());
+
         $product_id = ProductApiService::updateProduct($request, $product);
 
         foreach ($request->prices as $price) {
@@ -96,6 +105,8 @@ class ProductApiController extends Controller
      */
     public function destroy(Product $product)
     {
+        abort_if(Gate::denies('product_delete'), $this->respondPermissionDenied());
+
         ProductColor::where('product_id', $product->id)->delete();
         ProductSize::where('product_id', $product->id)->delete();
         ProductPrice::where('product_id', $product->id)->delete();
@@ -115,6 +126,8 @@ class ProductApiController extends Controller
 
     public function query(Request $request)
     {
+        abort_if(Gate::denies('product_query'), $this->respondPermissionDenied());
+
         $data = ProductApiService::filterProduct($request);
 
         $products = Product::whereProductColor($request["color_id"])
