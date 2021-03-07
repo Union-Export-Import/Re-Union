@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use App\Services\CategoryApiService;
-use App\Services\FilterQueryService;
+use Illuminate\Http\Request;
 use App\Traits\ResponserTrait;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Services\CategoryApiService;
+use App\Services\FilterQueryService;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryApiController extends Controller
 {
@@ -24,6 +25,8 @@ class CategoryApiController extends Controller
      */
     public function store(CategoryRequest $request)
     {
+        abort_if(Gate::denies('category_create'), $this->respondPermissionDenied());
+
         Category::create([
             'name' => $request->name,
         ]);
@@ -38,6 +41,8 @@ class CategoryApiController extends Controller
      */
     public function show(Category $category)
     {
+        abort_if(Gate::denies('category_show'), $this->respondPermissionDenied());
+
         return $this->respondCollection('success', $category);
     }
 
@@ -50,7 +55,10 @@ class CategoryApiController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        abort_if(Gate::denies('category_update'), $this->respondPermissionDenied());
+
         CategoryApiService::manageCategory($request, $category);
+
         return $this->respondCreateMessageOnly('success');
     }
 
@@ -62,6 +70,8 @@ class CategoryApiController extends Controller
      */
     public function destroy(Category $category)
     {
+        abort_if(Gate::denies('category_delete'), $this->respondPermissionDenied());
+
         $category->delete();
 
         return $this->respondCreateMessageOnly('success');
@@ -69,8 +79,10 @@ class CategoryApiController extends Controller
 
     public function query(Request $request)
     {
+        abort_if(Gate::denies('category_query'), $this->respondPermissionDenied());
+
         $categories = DB::table('categories');
-        // return $users->get();
+        
         $data = FilterQueryService::FilterQuery($request, $categories);
 
         return $this->respondCollectionWithPagination('success', $data);

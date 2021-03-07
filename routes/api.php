@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\v1\PermissionApiController;
 use App\Http\Controllers\Api\v1\ProductApiController;
 use App\Http\Controllers\Api\v1\RoleApiController;
 use App\Http\Controllers\Api\v1\SaleApiController;
+use App\Http\Controllers\Api\v1\SendEmailApiController;
 use App\Http\Controllers\Api\v1\SupplierApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
 use App\Http\Controllers\UacLogController;
@@ -35,7 +36,7 @@ Route::group([], function () {
     //Forget Api
     Route::post('forget-password', [UserApiController::class, 'forgetPassword']);
 
-    Route::middleware(['auth:sanctum'])->group(function () {
+    Route::middleware(['auth:sanctum', 'gate'])->group(function () {
         //Change Password
         Route::post('change-password', [UserApiController::class, 'oldPasswordChange']);
         //Role
@@ -56,15 +57,19 @@ Route::group([], function () {
 
         //Customer
         Route::resource('customers', CustomerApiController::class);
+        Route::post('customers/query', [CustomerApiController::class, 'query']);
 
         //Supplier
         Route::resource('suppliers', SupplierApiController::class);
+        Route::post('suppliers/query', [SupplierApiController::class, 'query']);
 
         //AssetType
         Route::resource('asset_types', AssetTypeApiController::class);
+        Route::post('asset_types/query', [AssetTypeApiController::class, 'query']);
 
         //Asset
         Route::resource('assets', AssetApiController::class);
+        Route::post('assets/query', [AssetApiController::class, 'query']);
 
         //Product
         Route::resource('products', ProductApiController::class);
@@ -79,6 +84,9 @@ Route::group([], function () {
         Route::resource('sales', SaleApiController::class);
 
         Route::post('sales/completePayment', [SaleApiController::class, 'completePayment']);
+
+        //Send Email
+        Route::post('send_email', [SendEmailApiController::class, 'sendEmail']);
 
     });
 });

@@ -8,6 +8,7 @@ use App\Models\Sale;
 use App\Services\SaleApiService;
 use App\Traits\ResponserTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SaleApiController extends Controller
 {
@@ -30,6 +31,8 @@ class SaleApiController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('sale_create'), $this->respondPermissionDenied());
+
         $total_price = null;
 
         foreach ($request->saleProductList as $saleProduct) {
@@ -85,14 +88,16 @@ class SaleApiController extends Controller
 
     public function completePayment(Request $request)
     {
+        abort_if(Gate::denies('sale_complete_payment'), $this->respondPermissionDenied());
+
         $sale = Sale::firstWhere('id', $request['sale_id']);
 
         $sale->update([
             'pay' => $request['pay'],
-            'change' => $sale->total_price - $request['pay'],
+            'change' => $request['pay'] - $sale->total_price,
             'sale_status' => "completed",
         ]);
-        
+
         return $this->respondCollection('success', $sale);
     }
 }

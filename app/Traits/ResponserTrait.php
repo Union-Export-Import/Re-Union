@@ -20,7 +20,7 @@ trait ResponserTrait
     {
         return response()->json([
             // 'code' => Response::HTTP_CONFLICT,
-            'message' => $message
+            'message' => $message,
         ], 422);
     }
 
@@ -61,8 +61,8 @@ trait ResponserTrait
                 'current_page' => $data->currentPage(),
                 'total_pages' => $data->lastPage(),
                 'next_pages' => $data->nextPageUrl(),
-                'previous_pages' => $data->previousPageUrl()
-            ]
+                'previous_pages' => $data->previousPageUrl(),
+            ],
         ], 200);
     }
     public function respondReferalCollection($message, $data, $referralCompany)
@@ -79,7 +79,7 @@ trait ResponserTrait
         return response()->json([
             'code' => 403,
             'message' => 'Permission denied',
-        ], 200);
+        ], 403);
     }
 
     protected function exceptionResponse($msg, $code, $responseCode = 200)
@@ -92,8 +92,6 @@ trait ResponserTrait
         return response()->json($result, $responseCode);
     }
 
-
-
     protected function errorResponse($msg)
     {
         $result = [
@@ -103,7 +101,6 @@ trait ResponserTrait
 
         return response()->json($result, 422);
     }
-
 
     public function respondSuccessMsgOnly($message)
     {
@@ -136,8 +133,8 @@ trait ResponserTrait
             'code' => Response::HTTP_OK,
             'message' => $message,
             'data' => [
-                'otp' => $otp
-            ]
+                'otp' => $otp,
+            ],
         ], 200);
     }
     public function respondImage($message, $imagePath)
@@ -153,7 +150,7 @@ trait ResponserTrait
         return response()->json([
             'code' => Response::HTTP_OK,
             'message' => $message,
-            'data' => $imagePath
+            'data' => $imagePath,
         ], 201);
     }
 
@@ -182,7 +179,7 @@ trait ResponserTrait
                 'is_eligible' => $statusFlag,
                 'closeMicroLoanCount' => $loanCount,
                 'message' => $msg,
-                'data' => $loanType
+                'data' => $loanType,
             ];
         }
 
@@ -193,7 +190,7 @@ trait ResponserTrait
         $result = [
             'code' => $code,
             'message' => $msg,
-            'data' => $data
+            'data' => $data,
         ];
         return response()->json($result, 200);
     }
@@ -203,7 +200,7 @@ trait ResponserTrait
         $result = [
             'code' => $code,
             'message' => $msg,
-            'data' => $data
+            'data' => $data,
         ];
         return response()->json($result, 200);
     }
@@ -216,7 +213,6 @@ trait ResponserTrait
             'message' => $msg,
         ];
 
-
         return response()->json($result, 200);
     }
     protected function responseMicroLoanAnswerSubmit($msg, $code, $answerSubmitID)
@@ -224,7 +220,7 @@ trait ResponserTrait
         $result = [
             'code' => $code,
             'message' => $msg,
-            'answer_submit_id' => $answerSubmitID
+            'answer_submit_id' => $answerSubmitID,
         ];
 
         return response()->json($result, 200);
@@ -286,7 +282,7 @@ trait ResponserTrait
         $data = [
             "error" => $error,
             "error_description" => $error_des,
-            "message" => $message
+            "message" => $message,
         ];
 
         return response()->json($data, 404);
@@ -298,7 +294,7 @@ trait ResponserTrait
             'error' => "invalid_request",
             'error_description' => "The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed.",
             'hint' => "Check the `password` parameter",
-            'message' => $message
+            'message' => $message,
         ];
 
         return response()->json($data, 404);
@@ -317,7 +313,7 @@ trait ResponserTrait
     public function invalidData($message)
     {
         $result = [
-            'message' => $message
+            'message' => $message,
         ];
 
         return response()->json($result, 422);
@@ -326,7 +322,7 @@ trait ResponserTrait
     public function duplicateEntry()
     {
         $result = [
-            'message' => "Duplicate Entry"
+            'message' => "Duplicate Entry",
         ];
 
         return response()->json($result, 409);
@@ -334,12 +330,11 @@ trait ResponserTrait
     public function loginFailed($message)
     {
         $result = [
-            'message' => $message
+            'message' => $message,
         ];
 
         return response()->json($result, 401);
     }
-
 
     // public function loginResponse($token){
     //     $data = [
