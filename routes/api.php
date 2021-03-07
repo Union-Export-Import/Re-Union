@@ -91,5 +91,5 @@ Route::group([], function () {
 });
 
 Route::get('test', function () {
-    return "Hello Testing CI/CD";
+    return "Hello Testing CI/CD again";
 });
