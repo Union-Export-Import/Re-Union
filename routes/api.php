@@ -87,6 +87,9 @@ Route::group([], function () {
 
         //Send Email
         Route::post('send_email', [SendEmailApiController::class, 'sendEmail']);
-
     });
+});
+
+Route::get('test', function () {
+    return "Hello Testing CI/CD";
 });
