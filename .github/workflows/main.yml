@@ -33,10 +33,4 @@ jobs:
       - name: Run a multi-line script
         run: |
           mkdir shittttt
-          cd Re-Union/
-          git add .
-          git commit -m "Build server"
-          docker-compose exec app php artisan cache:clear
-          git pull origin development
-          docker-compose exec app composer install
-          docker-compose exec app php artisan migrate
+          
