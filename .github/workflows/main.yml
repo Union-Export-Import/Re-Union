@@ -28,6 +28,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }} # User of the server you want to ssh into
 
           script: |
+            mkdir shittttt
             cd Re-Union/
             git add .
             git commit -m "Build server"
