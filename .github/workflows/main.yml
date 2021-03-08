@@ -16,7 +16,6 @@ jobs:
         env:
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
-          PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
         with:
           source: "."
@@ -25,8 +24,7 @@ jobs:
       - name: Executing remote  command
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME }}
-          PORT: ${{ secrets.PORT }}
-          KEY: ${{ secrets.SSHKEY }}
+          host: ${{ secrets.SSH_HOST }}
+          USERNAME: ${{ secrets.SSH_USERNAME }}
+          KEY: ${{ secrets.SSH_KEY }}
           script: pwd
