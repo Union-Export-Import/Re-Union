@@ -26,5 +26,5 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           USERNAME: ${{ secrets.SSH_USERNAME }}
-          KEY: ${{ secrets.SSH_KEY }}
+          KEY: ${{ secrets.SSH_KEY_SECRET }}
           script: pwd
