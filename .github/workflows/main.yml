@@ -35,5 +35,3 @@ jobs:
           git checkout .
           mkdir shittty
           git pull origin development
-          docker-compose exec app composer install
-          docker-compose exec app php artisan migrate
