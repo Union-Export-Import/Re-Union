@@ -33,6 +33,9 @@ jobs:
       - name: Run a multi-line script
         run: |
           cd
+          pwd
+          cd Re-union
+          pwd
           git checkout .
           pwd
           ls
