@@ -33,5 +33,6 @@ jobs:
       - name: Run a multi-line script
         run: |
           git checkout .
+          ls
           mkdir shittty
           git pull origin development
