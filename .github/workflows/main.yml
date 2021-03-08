@@ -28,6 +28,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }} # User of the server you want to ssh into
      
           script: |
-            pwd
-            cd /root
-            pwd
+            ls -las
