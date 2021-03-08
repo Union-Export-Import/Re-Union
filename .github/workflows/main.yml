@@ -33,7 +33,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           git checkout .
-          docker-compose exec app php artisan cache:clear
+          mkdir shittty
           git pull origin development
           docker-compose exec app composer install
           docker-compose exec app php artisan migrate
