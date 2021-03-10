@@ -15,4 +15,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }} # User of the server you want to ssh into
 
           script: |
-            pwd
+            cd Re-Union/
+            git checkout .
+            git pull origin development
+            docker-compose exec app php artisan config:clear
+            docker-compose exec app composer install
+            docker-compose exec app php artisan migrate
