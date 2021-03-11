@@ -18,3 +18,6 @@ jobs:
             cd Re-Union/
             git checkout .
             git pull origin development
+            cd
+            sh deployed-laravel.sh
+            
