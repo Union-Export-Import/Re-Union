@@ -14,8 +14,17 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        Role::create([
-            'title' => 'user_access_control',
-        ]);
+        $roles = [
+            [
+                'id'    => 1,
+                'title' => 'Admin',
+            ],
+            [
+                'id'    => 2,
+                'title' => 'User',
+            ],
+        ];
+
+        Role::insert($roles);
     }
 }
