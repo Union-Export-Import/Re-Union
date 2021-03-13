@@ -73,7 +73,7 @@ class UserApiController extends Controller
      */
     public function show(User $user)
     {
-        abort_if(Gate::denies('user_show'), $this->respondPermissionDenied());
+        abort_if(Gate::denies('user_access'), $this->respondPermissionDenied());
 
         return $this->respondCollection('success', new UserApiDetailResourse($user));
     }
