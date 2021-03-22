@@ -1,6 +1,5 @@
-version: '3'
+version: "3"
 services:
-
   #PHP Service
   app:
     build:
@@ -27,7 +26,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
+      - "81:80"
       - "443:443"
     volumes:
       - ./:/var/www
@@ -35,22 +34,18 @@ services:
     networks:
       - app-network
 
-  #MySQL Service
   db:
-    image: mysql:5.7.22
-    container_name: db
+    image: postgres
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3306"
+      - "5432:5433"
     environment:
-      MYSQL_DATABASE: union_export_import
-      MYSQL_ROOT_PASSWORD: union_export_import
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: union_export_import
     volumes:
-      - dbdata:/var/lib/mysql/
-      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - database-data:/var/lib/postgresql/data/
     networks:
       - app-network
 
@@ -60,5 +55,5 @@ networks:
     driver: bridge
 #Volumes
 volumes:
-  dbdata:
+  database-data:
     driver: local
