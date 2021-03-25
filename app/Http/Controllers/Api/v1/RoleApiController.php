@@ -96,7 +96,9 @@ class RoleApiController extends Controller
         abort_if(Gate::denies('role_query'), $this->respondPermissionDenied());
 
         //Search roles with array
-        $roles = DB::table('roles');
+        $roles = Role::with('permissions');
+
+        // $roles = DB::table('roles');
 
         $data = FilterQueryService::FilterQuery($request, $roles);
 

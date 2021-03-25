@@ -19,7 +19,9 @@ class SendEmailApiController extends Controller
         // Mail::send('email.sendEmail', $request, function ($message) use ($request) {
         //     $message->to($request["email"], $request["email"])
         //         ->subject($request["title"]);
-
+        // $message->attach($request['attachment']->getRealPath(), [
+        //     'as' => $request['attachment']->getClientOriginalName(),
+        // ]);
         //     foreach ($request->attachment as $file) {
         //         $message->attach($file);
         //     }
