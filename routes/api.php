@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\v1\SaleApiController;
 use App\Http\Controllers\Api\v1\SendEmailApiController;
 use App\Http\Controllers\Api\v1\SupplierApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UacLogController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,16 +32,18 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::group([], function () {
     // Route::post('user-update/{id}',[UserApiController::class,'update']);
-    Route::post('login', [LoginApiController::class, 'login']);
+    Route::post('login', [AuthController::class, 'login']);
     Route::resource('users/union/admin/team', UserApiController::class);
     //Forget Api
     Route::post('forget-password', [UserApiController::class, 'forgetPassword']);
 
-    Route::middleware(['auth:sanctum', 'gate'])->group(function () {
+    Route::middleware(['api', 'gate'])->group(function () {
         //Change Password
         Route::post('change-password', [UserApiController::class, 'oldPasswordChange']);
         //Role
-        Route::get('me', [UserApiController::class, 'myProfile']);
+        Route::get('me', [AuthController::class, 'me']);
+        Route::get('logout', [AuthController::class, 'logout']);
+        Route::get('refresh', [AuthController::class, 'refresh']);
 
         Route::apiResource('roles', RoleApiController::class);
         Route::post('roles/query', [RoleApiController::class, 'query']);

@@ -39,11 +39,11 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "5432:5432"
+      - "6543:5432"
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: union_export_import
+      POSTGRES_PASSWORD: postgres_docker
+      POSTGRES_USER: postgres_docker
+      POSTGRES_DB: postgres_docker
     volumes:
       - database-data:/var/lib/postgresql/data/
     networks:
