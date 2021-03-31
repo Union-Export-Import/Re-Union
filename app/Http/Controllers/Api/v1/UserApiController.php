@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserApiController extends Controller
 {
+
     use ResponserTrait;
     use EmailTrait;
     /**

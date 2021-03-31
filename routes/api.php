@@ -37,7 +37,7 @@ Route::group([], function () {
     //Forget Api
     Route::post('forget-password', [UserApiController::class, 'forgetPassword']);
 
-    Route::middleware(['api', 'gate'])->group(function () {
+    Route::middleware(['auth:api', 'gate'])->group(function () {
         //Change Password
         Route::post('change-password', [UserApiController::class, 'oldPasswordChange']);
         //Role
