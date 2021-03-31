@@ -19,12 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 class UserApiController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
-
-
     use ResponserTrait;
     use EmailTrait;
     /**
