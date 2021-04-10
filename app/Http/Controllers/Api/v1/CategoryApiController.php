@@ -41,7 +41,7 @@ class CategoryApiController extends Controller
      */
     public function show(Category $category)
     {
-        abort_if(Gate::denies('category_show'), $this->respondPermissionDenied());
+        abort_if(Gate::denies('category_access'), $this->respondPermissionDenied());
 
         return $this->respondCollection('success', $category);
     }
@@ -79,7 +79,7 @@ class CategoryApiController extends Controller
 
     public function query(Request $request)
     {
-        abort_if(Gate::denies('category_query'), $this->respondPermissionDenied());
+        abort_if(Gate::denies('category_access'), $this->respondPermissionDenied());
 
         $categories = DB::table('categories');
         
