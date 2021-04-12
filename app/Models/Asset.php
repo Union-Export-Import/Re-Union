@@ -10,4 +10,8 @@ class Asset extends Model
     use HasFactory;
 
     protected $fillable = ['asset_name','asset_type_id'];
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }

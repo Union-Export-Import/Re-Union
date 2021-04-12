@@ -130,7 +130,7 @@ class ProductApiController extends Controller
 
         $data = ProductApiService::filterProduct($request);
 
-        $products = Product::whereProductColor($request["color_id"])
+        $products = Product::with(['category', 'asset'])->whereProductColor($request["color_id"])
                         ->whereProductSize($request["size_id"])
                         ->whereProductSupplier($request['supplier_id']);
 

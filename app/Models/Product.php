@@ -11,6 +11,14 @@ class Product extends Model
 
     protected $fillable = ['name', 'category_id', 'product_code', 'serial_no', 'asset_id'];
 
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
+
+    public function asset(){
+        return $this->belongsTo(Asset::class);
+    }
+
     public function colors()
     {
         return $this->hasMany(ProductColor::class);
