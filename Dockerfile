@@ -34,6 +34,16 @@ RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-configure gd --enable-gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
 RUN docker-php-ext-install gd
 
+# Install OpenSSL and install
+RUN apt-get update && \
+    apt-get install -y openssl && \
+    openssl genrsa -des3 -passout pass:x -out server.pass.key 2048 && \
+    openssl rsa -passin pass:x -in server.pass.key -out server.key && \
+    rm server.pass.key && \
+    openssl req -new -key server.key -out server.csr \
+        -subj "/C=MM/ST=Myanmar/L=Yangon/O=Union/OU=IT Department/CN=union-export-import.me" && \
+    openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 

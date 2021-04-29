@@ -50,9 +50,12 @@ class CustomerApiController extends Controller
      * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function show(Customer $customer)
+    public function show($id)
     {
-        //
+        abort_if(Gate::denies('customer_access'), $this->respondPermissionDenied());
+
+        
+        return $this->respondCollection('success', Customer::find($id));
     }
 
     /**

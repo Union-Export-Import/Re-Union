@@ -39,7 +39,7 @@ Route::group([], function () {
     //Forget Api
     Route::post('forget-password', [UserApiController::class, 'forgetPassword']);
 
-    Route::middleware(['api', 'gate'])->group(function () {
+    Route::middleware(['auth:api', 'gate'])->group(function () {
         //Change Password
         Route::post('change-password', [UserApiController::class, 'oldPasswordChange']);
         //Role
@@ -61,8 +61,8 @@ Route::group([], function () {
         Route::post('users/query', [UserApiController::class, 'query']);
 
         //Customer
-        Route::resource('customers', CustomerApiController::class);
-        Route::post('customers/query', [CustomerApiController::class, 'query']);
+        Route::resource('cust', CustomerApiController::class);
+        Route::post('cust/query', [CustomerApiController::class, 'query']);
 
         //Supplier
         Route::resource('suppliers', SupplierApiController::class);
@@ -102,5 +102,5 @@ Route::group([], function () {
 });
 
 Route::get('test', function () {
-    return phpinfo();
+    return "hiii";
 });
