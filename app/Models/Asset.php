@@ -9,5 +9,5 @@ class Asset extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['asset_name','asset_type_id'];
+    protected $fillable = ['asset_name', 'asset_type_id'];
 }

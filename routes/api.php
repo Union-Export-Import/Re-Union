@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\v1\AssetApiController;
 use App\Http\Controllers\Api\v1\AssetTypeApiController;
 use App\Http\Controllers\Api\v1\CategoryApiController;
+use App\Http\Controllers\Api\v1\ColorApiController;
 use App\Http\Controllers\Api\v1\CustomerApiController;
 use App\Http\Controllers\Api\v1\LoginApiController;
 use App\Http\Controllers\Api\v1\PermissionApiController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Api\v1\ProductApiController;
 use App\Http\Controllers\Api\v1\RoleApiController;
 use App\Http\Controllers\Api\v1\SaleApiController;
 use App\Http\Controllers\Api\v1\SendEmailApiController;
+use App\Http\Controllers\Api\v1\SizeApiController;
 use App\Http\Controllers\Api\v1\SupplierApiController;
 use App\Http\Controllers\Api\v1\UserApiController;
 use App\Http\Controllers\AuthController;
@@ -90,6 +92,12 @@ Route::group([], function () {
 
         //Send Email
         Route::post('send_email', [SendEmailApiController::class, 'sendEmail']);
+
+        //Size
+        Route::resource('sizes', SizeApiController::class);
+
+        //Color
+        Route::apiResource('colors', ColorApiController::class);
     });
 });
 

@@ -26,7 +26,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80"
+      - "70:80"
       - "443:443"
     volumes:
       - ./:/var/www
@@ -39,11 +39,11 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "6543:5432"
+      - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: postgres_docker
-      POSTGRES_USER: postgres_docker
-      POSTGRES_DB: postgres_docker
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres_user
+      POSTGRES_DB: postgres_re_union
     volumes:
       - database-data:/var/lib/postgresql/data/
     networks:

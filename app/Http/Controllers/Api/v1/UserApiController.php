@@ -52,14 +52,11 @@ class UserApiController extends Controller
         if (!$exist_user) {
             $user = UserApiService::createUser($request, $hashed_random_password);
 
-            // if ($user == config('enums.users')['DUP']) {
-            //     return $this->duplicateEntry();
-            // }
             UserApiService::UacLogCreate(json_encode($request->all()), 'user_create', $user->id);
 
             $this->sendUserCreationEmail($user, $auto_pwd);
 
-            return $this->respondCreateMessageOnly($user);
+            return $this->respondcreateCollection('success', $user);
         } else {
             return $this->duplicateEntry();
         }

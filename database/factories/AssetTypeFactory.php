@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
+use App\Models\AssetType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CategoryFactory extends Factory
+class AssetTypeFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Category::class;
+    protected $model = AssetType::class;
 
     /**
      * Define the model's default state.
@@ -22,7 +22,7 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'asset_type' => $this->faker->name
         ];
     }
 }

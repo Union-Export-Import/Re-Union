@@ -25,7 +25,6 @@ class AssetApiController extends Controller
         $assets = Asset::paginate(10);
 
         return $this->respondCollectionWithPagination('success', $assets);
-
     }
 
     /**
@@ -54,7 +53,9 @@ class AssetApiController extends Controller
      */
     public function show($id)
     {
-        //
+        $asset = Asset::findOrFail($id);
+
+        return $this->respondCollection('success', $asset);
     }
 
     /**
