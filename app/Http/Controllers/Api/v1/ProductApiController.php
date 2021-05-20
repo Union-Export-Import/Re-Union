@@ -46,13 +46,7 @@ class ProductApiController extends Controller
         $product = ProductApiService::createProduct($request);
 
         foreach ($request->prices as $price) {
-            if ($price['type'] == "color") {
-                $product_color = ProductApiService::createProductColor($product, $price);
-            }
-            if ($price['type'] == "size") {
-                $product_size = ProductApiService::createProductSize($product, $price);
-            }
-            ProductApiService::createProductPrice($price, $product_color ?? null, $product_size ?? null, $product->id);
+            ProductApiService::createProductPrice($price, $product->id);
         }
 
         return $this->respondSuccessMsgOnly("success");

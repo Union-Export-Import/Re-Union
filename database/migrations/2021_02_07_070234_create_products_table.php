@@ -18,8 +18,10 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('asset_id')->nullable();
-            $table->string('product_code')->nullable();
+            $table->string('model_no')->nullable();
             $table->string('serial_no')->nullable();
+            $table->string('description')->nullable();
+            $table->json('specification')->nullable();
             $table->timestamps();
         });
     }

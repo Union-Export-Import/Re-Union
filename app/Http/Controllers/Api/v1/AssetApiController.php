@@ -94,7 +94,7 @@ class AssetApiController extends Controller
 
     public function query(Request $request)
     {
-        abort_if(Gate::denies('asset_query'), $this->respondPermissionDenied());
+        abort_if(Gate::denies('asset_access'), $this->respondPermissionDenied());
 
         $assets = DB::table('assets');
 
