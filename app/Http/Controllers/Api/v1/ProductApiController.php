@@ -79,13 +79,7 @@ class ProductApiController extends Controller
         $product_id = ProductApiService::updateProduct($request, $product);
 
         foreach ($request->prices as $price) {
-            if ($price['type'] == "color") {
-                $product_color = ProductApiService::updateProductColor($price);
-            }
-            if ($price['type'] == "size") {
-                $product_size = ProductApiService::updateProductSize($price);
-            }
-            ProductApiService::updateProductPrice($price, $product_color ?? null, $product_size ?? null);
+            ProductApiService::updateProductPrice($price);
         }
 
         return $this->respondSuccessMsgOnly("success");
@@ -101,8 +95,6 @@ class ProductApiController extends Controller
     {
         abort_if(Gate::denies('product_delete'), $this->respondPermissionDenied());
 
-        ProductColor::where('product_id', $product->id)->delete();
-        ProductSize::where('product_id', $product->id)->delete();
         ProductPrice::where('product_id', $product->id)->delete();
         $product->delete();
 
@@ -112,8 +104,6 @@ class ProductApiController extends Controller
     public function productPriceDelete(Request $request)
     {
         $product_price = ProductPrice::firstWhere('id', $request->product_price_id);
-        ProductColor::where('id', $product_price->product_color_id)->delete();
-        ProductSize::where('id', $product_price->product_size_id)->delete();
         $product_price->delete();
         return $this->respondSuccessMsgOnly("success");
     }

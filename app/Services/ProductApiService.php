@@ -44,15 +44,16 @@ class ProductApiService
         ]);
     }
 
-    public static function updateProductPrice($price, $product_color, $product_size)
+    public static function updateProductPrice($price)
     {
         $product_price = ProductPrice::firstWhere('id', $price['id']);
+
 
         $product_price->update([
             'quantity' => $price['quantity'],
             'buying_price' => $price['buying_price'],
             'selling_price' => $price['selling_price'],
-            'supplier_id' => $price['supplier'],
+            'supplier_id' => $price['supplier_id'],
             'specification' => $price['specification']
         ]);
     }
