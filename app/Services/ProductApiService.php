@@ -3,9 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
-use App\Models\ProductColor;
 use App\Models\ProductPrice;
-use App\Models\ProductSize;
 
 class ProductApiService
 {
@@ -14,9 +12,10 @@ class ProductApiService
         return Product::create([
             'name' => $request->name,
             'category_id' => $request->category_id,
-            'product_code' => $request->product_code,
+            'model_no' => $request->model_no,
             'serial_no' => $request->serial_no,
             'asset_id' => $request->asset_id,
+            'description' => $request->description
         ]);
     }
 
@@ -29,6 +28,7 @@ class ProductApiService
             'selling_price' => $price['selling_price'],
             'supplier_id' => $price['supplier_id'],
             'product_id' => $product_id,
+            'specification' => $price['specification']
         ]);
     }
 
@@ -37,9 +37,10 @@ class ProductApiService
         return $product->update([
             'name' => $request->name,
             'category_id' => $request->category_id,
-            'product_code' => $request->product_code,
+            'model_no' => $request->model_no,
             'serial_no' => $request->serial_no,
             'asset_id' => $request->asset_id,
+            'description' => $request->description
         ]);
     }
 
@@ -52,18 +53,15 @@ class ProductApiService
             'buying_price' => $price['buying_price'],
             'selling_price' => $price['selling_price'],
             'supplier_id' => $price['supplier'],
-            'product_color_id' => $price['product_color_id'] ?? null,
-            'product_size_id' => $product_size->id ?? null,
+            'specification' => $price['specification']
         ]);
     }
 
     public static function filterProduct($request)
     {
-       $products = Product::whereProductName($request->name)
-                ->whereProductCode($request->product_code)
-                ->whereProductColor($request->color_id)
-                ->whereProductSize($request->size_id)
-                ->whereProductSupplier($request->supplier_id)->paginate(10);
+        $products = Product::whereProductName($request->name)
+            ->WhereModelNo($request->model_no)
+            ->whereProductSupplier($request->supplier_id)->paginate(10);
         return $products;
     }
 }

@@ -21,7 +21,6 @@ class CreateProductsTable extends Migration
             $table->string('model_no')->nullable();
             $table->string('serial_no')->nullable();
             $table->string('description')->nullable();
-            $table->json('specification')->nullable();
             $table->timestamps();
         });
     }

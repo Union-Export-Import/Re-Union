@@ -21,6 +21,7 @@ class CreateProductPricesTable extends Migration
             $table->string('quantity')->nullable();
             $table->string('supplier_id')->nullable();
             $table->string('product_id');
+            $table->json('specification')->nullable();
             $table->timestamps();
         });
     }
