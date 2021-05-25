@@ -15,3 +15,5 @@ In application folder and type
 ```docker-compose exec -it app bash```
 
 This will take you to www folder and inside that you can run ```php artisan``` command.
+
+####  Sample ENV file can be see in .env_clone
