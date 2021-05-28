@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AssetApiResource;
 use App\Models\Asset;
 use App\Services\FilterQueryService;
 use App\Traits\ResponserTrait;
@@ -96,10 +97,11 @@ class AssetApiController extends Controller
     {
         abort_if(Gate::denies('asset_query'), $this->respondPermissionDenied());
 
-        $assets = DB::table('assets');
+        $assets = Asset::with([]);
+        // $assets = DB::table('assets');
 
         $data = FilterQueryService::FilterQuery($request, $assets);
-
-        return $this->respondCollectionWithPagination('success', $data);
+        
+        return $this->respondCollectionWithPagination('success', AssetApiResource::collection($data));
     }
 }
