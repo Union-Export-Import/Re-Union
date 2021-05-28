@@ -9,13 +9,15 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'category_id', 'product_code', 'serial_no', 'asset_id'];
+    protected $fillable = ['name', 'category_id', 'model_no', 'serial_no', 'asset_id', 'description'];
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function asset(){
+    public function asset()
+    {
         return $this->belongsTo(Asset::class);
     }
 
@@ -47,10 +49,10 @@ class Product extends Model
         return $query;
     }
 
-    public function scopeWhereProductCode($query, $code)
+    public function scopeWhereModelNo($query, $code)
     {
         if ($code) {
-            return $query->where('product_code', $code);
+            return $query->where('model_no', $code);
         }
         return $query;
     }
@@ -84,5 +86,4 @@ class Product extends Model
         }
         return $query;
     }
-
 }

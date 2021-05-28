@@ -93,7 +93,7 @@ class SupplierApiController extends Controller
 
     public function query(Request $request)
     {
-        abort_if(Gate::denies('supplier_query'), $this->respondPermissionDenied());
+        abort_if(Gate::denies('supplier_access'), $this->respondPermissionDenied());
 
         $suppliers = DB::table('suppliers');
 
