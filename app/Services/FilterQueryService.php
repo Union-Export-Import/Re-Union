@@ -11,7 +11,7 @@ class FilterQueryService
         //pagination params
         $pagination_param = $request["paginationParam"];
         //sorting params
-        $soring_params = $request["sortingParams"];
+        $sorting_params = $request["sortingParams"];
 
         //filter params
         $filter_params = $request["filter"]["filterParams"];
@@ -30,10 +30,10 @@ class FilterQueryService
         }
         //Logic with OR AND
 
-        if (isset($soring_params)) {
+        if (isset($sorting_params)) {
             $query->orderBy(
-                $soring_params['key'],
-                $soring_params['sortType']
+                $sorting_params['key'],
+                $sorting_params['sortType']
             );
         }
 

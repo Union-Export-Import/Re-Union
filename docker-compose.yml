@@ -41,9 +41,15 @@ services:
     ports:
       - "5432:5432"
     environment:
+<<<<<<< HEAD
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres_user
+      POSTGRES_DB: postgres_re_union
+=======
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: union_export_import
+>>>>>>> 068ce0011c5cc0b34e70701490115dfe040acaea
     volumes:
       - database-data:/var/lib/postgresql/data/
     networks:
