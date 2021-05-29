@@ -43,7 +43,9 @@ class AssetTypeApiController extends Controller
      */
     public function show(AssetType $assetType)
     {
+        // $asset = AssetType::findOrFail($assetType);
 
+        return $this->respondCollection('success', $assetType);
     }
 
     public function update(Request $request, AssetType $assetType)

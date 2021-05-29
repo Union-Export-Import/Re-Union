@@ -8,14 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class Asset extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'created_at' => 'datetime:d-m-Y',
+    ];
 
-<<<<<<< HEAD
-    protected $fillable = ['asset_name', 'asset_type_id'];
-=======
     protected $fillable = ['asset_name','asset_type_id'];
 
     public function products(){
         return $this->hasMany(Product::class);
     }
->>>>>>> a332b07a3724244b2b20f6eb14a244775563df5f
+     
+    /**
+     * Get the asset_types that owns the Asset
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function asset_type()
+    {
+        return $this->belongsTo(AssetType::class, 'asset_type_id');
+    }
 }

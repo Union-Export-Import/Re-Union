@@ -26,7 +26,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "70:80"
+      - "80:80"
       - "443:443"
     volumes:
       - ./:/var/www
@@ -49,7 +49,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: union_export_import
->>>>>>> a332b07a3724244b2b20f6eb14a244775563df5f
+>>>>>>> 068ce0011c5cc0b34e70701490115dfe040acaea
     volumes:
       - database-data:/var/lib/postgresql/data/
     networks:

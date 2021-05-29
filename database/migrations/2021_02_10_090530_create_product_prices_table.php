@@ -20,9 +20,8 @@ class CreateProductPricesTable extends Migration
             $table->string('selling_price')->nullable();
             $table->string('quantity')->nullable();
             $table->string('supplier_id')->nullable();
-            $table->string('product_color_id')->nullable();
-            $table->string('product_size_id')->nullable();
             $table->string('product_id');
+            $table->json('specification')->nullable();
             $table->timestamps();
         });
     }

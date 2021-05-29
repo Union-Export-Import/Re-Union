@@ -91,7 +91,7 @@ class CustomerApiController extends Controller
 
     public function query(Request $request)
     {
-        abort_if(Gate::denies('customer_query'), $this->respondPermissionDenied());
+        abort_if(Gate::denies('customer_access'), $this->respondPermissionDenied());
 
         $customers = DB::table('customers');
 
