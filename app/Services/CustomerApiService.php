@@ -6,11 +6,12 @@ use App\Models\Customer;
 
 class CustomerApiService
 {
-    public static function manageCustomer($request)
+    public static function manageCustomer($request, $customer = null)
     {
+        $customer_id = $customer && $customer->id ? $customer->id : null;
         Customer::updateOrcreate(
             [
-                'phone_number' => $request->phone_number,
+                'id' => $customer_id,
             ],
             [
                 'name' => $request->name,

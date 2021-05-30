@@ -61,8 +61,8 @@ Route::group([], function () {
         Route::post('users/query', [UserApiController::class, 'query']);
 
         //Customer
-        Route::resource('cust', CustomerApiController::class);
-        Route::post('cust/query', [CustomerApiController::class, 'query']);
+        Route::resource('customers', CustomerApiController::class);
+        Route::post('customers/query', [CustomerApiController::class, 'query']);
 
         //Supplier
         Route::resource('suppliers', SupplierApiController::class);
