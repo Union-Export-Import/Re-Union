@@ -15,14 +15,9 @@ class ProductPriceResource extends JsonResource
     public function toArray($request)
     {
         $resource = $this->resource;
-        $product_color = new ColorResource($resource->productColor ?? null);
-        $product_size = new SizeResource($resource->productSize ?? null);
-        
-        unset($resource->productColor);
-        unset($resource->productSize);
-
-        $resource->product_color = $product_color;
-        $resource->product_size = $product_size;
+        $supplier = $resource->supplier->name ?? null;
+        unset($resource->supplier);
+        $resource->supplier = $supplier;
         return $resource;
     }
 }

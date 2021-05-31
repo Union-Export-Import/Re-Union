@@ -56,7 +56,7 @@ class AssetApiController extends Controller
     {
         $asset = Asset::findOrFail($id);
 
-        return $this->respondCollection('success', $asset);
+        return $this->respondCollection('success',new AssetApiResource($asset));
     }
 
     /**

@@ -38,13 +38,14 @@ Route::group([], function () {
     Route::resource('users/union/admin/team', UserApiController::class);
     //Forget Api
     Route::post('forget-password', [UserApiController::class, 'forgetPassword']);
+    Route::get('logout', [AuthController::class, 'logout']);
 
     Route::middleware(['auth:api', 'gate'])->group(function () {
         //Change Password
         Route::post('change-password', [UserApiController::class, 'oldPasswordChange']);
         //Role
         Route::get('me', [AuthController::class, 'me']);
-        Route::get('logout', [AuthController::class, 'logout']);
+        // Route::get('logout', [AuthController::class, 'logout']);
         Route::get('refresh', [AuthController::class, 'refresh']);
 
         Route::apiResource('roles', RoleApiController::class);
