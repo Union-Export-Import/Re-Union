@@ -55,7 +55,10 @@ class SupplierApiController extends Controller
      */
     public function show($id)
     {
-        //
+        abort_if(Gate::denies('supplier_access'), $this->respondPermissionDenied());
+
+        
+        return $this->respondCollection('success', Supplier::find($id));
     }
 
     /**
@@ -70,8 +73,6 @@ class SupplierApiController extends Controller
         abort_if(Gate::denies('supplier_update'), $this->respondPermissionDenied());
 
         $user = SupplierApiService::manageSupplier($request, $supplier);
-
-        UserApiService::UacLogCreate(json_encode($request->all()), 'supplier_update');
 
         return $this->respondCreateMessageOnly('success');
     }

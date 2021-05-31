@@ -69,7 +69,7 @@ class CustomerApiController extends Controller
     {
         abort_if(Gate::denies('customer_update'), $this->respondPermissionDenied());
 
-        CustomerApiService::manageCustomer($request);
+        CustomerApiService::manageCustomer($request, $customer);
 
         return $this->respondCreateMessageOnly('success');
     }

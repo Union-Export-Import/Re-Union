@@ -11,4 +11,15 @@ class ProductPrice extends Model
 
     protected $fillable = ['buying_date', 'buying_price', 'selling_price', 'quantity', 'supplier_id', 'product_id', 'specification'];
 
+    /**
+     * Get the supplier that owns the ProductPrice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
 }
